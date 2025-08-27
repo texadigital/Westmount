@@ -58,5 +58,3 @@ class UpdateMembershipStatuses extends Command
         $this->info("- {$lapsedCount} marquée(s) comme caduque(s)");
         
         return 0;
-    }
-}

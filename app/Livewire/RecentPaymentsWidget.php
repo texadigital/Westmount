@@ -81,6 +81,6 @@ class RecentPaymentsWidget extends BaseWidget
 
     protected function getTableHeading(): string
     {
-        return 'Derniers Paiements (Top 10)';
+        return 'Paiements Récents';
     }
 }

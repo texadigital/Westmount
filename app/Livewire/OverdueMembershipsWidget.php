@@ -71,6 +71,6 @@ class OverdueMembershipsWidget extends BaseWidget
 
     protected function getTableHeading(): string
     {
-        return 'Adhésions en Retard (Top 10)';
+        return 'Adhésions en Retard';
     }
 }

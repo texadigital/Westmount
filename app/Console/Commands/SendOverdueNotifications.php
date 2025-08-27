@@ -68,5 +68,3 @@ class SendOverdueNotifications extends Command
         $this->info("Terminé ! {$sentCount} notification(s) envoyée(s).");
         
         return 0;
-    }
-}
