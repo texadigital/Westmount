@@ -35,7 +35,7 @@ class SponsorshipResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('sponsor_id')
                             ->label('Parrain')
-                            ->options(Member::active()->pluck('full_name', 'id'))
+                            ->options(Member::active()->get()->pluck('full_name', 'id'))
                             ->required()
                             ->searchable()
                             ->preload(),

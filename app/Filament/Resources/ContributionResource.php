@@ -36,14 +36,14 @@ class ContributionResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('member_id')
                             ->label('Membre qui Paie')
-                            ->options(Member::active()->pluck('full_name', 'id'))
+                            ->options(Member::active()->get()->pluck('full_name', 'id'))
                             ->required()
                             ->searchable()
                             ->preload(),
                         
                         Forms\Components\Select::make('deceased_member_id')
                             ->label('Membre Décédé')
-                            ->options(Member::pluck('full_name', 'id'))
+                            ->options(Member::get()->pluck('full_name', 'id'))
                             ->required()
                             ->searchable()
                             ->preload(),

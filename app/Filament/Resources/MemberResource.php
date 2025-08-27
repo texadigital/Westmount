@@ -124,7 +124,7 @@ class MemberResource extends Resource
                         
                         Forms\Components\Select::make('sponsor_id')
                             ->label('Parrain')
-                            ->options(Member::active()->pluck('full_name', 'id'))
+                            ->options(Member::active()->get()->pluck('full_name', 'id'))
                             ->searchable()
                             ->placeholder('Aucun parrain'),
                         

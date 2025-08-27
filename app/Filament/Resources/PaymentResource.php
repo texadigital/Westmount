@@ -43,7 +43,7 @@ class PaymentResource extends Resource
                         
                         Forms\Components\Select::make('member_id')
                             ->label('Membre')
-                            ->options(Member::active()->pluck('full_name', 'id'))
+                            ->options(Member::active()->get()->pluck('full_name', 'id'))
                             ->required()
                             ->searchable()
                             ->preload(),
