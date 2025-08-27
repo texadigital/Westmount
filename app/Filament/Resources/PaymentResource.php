@@ -36,17 +36,30 @@ class PaymentResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('membership_id')
                             ->label('Adhésion')
-                            ->options(Membership::active()->with('member')->get()->pluck('member.full_name', 'id'))
+                            ->options(Membership::active()->with('member')->get()->mapWithKeys(function ($membership) {
+                                return [$membership->id => "Adhésion #{$membership->id} - {$membership->member->full_name}"];
+                            }))
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function ($state, $set) {
+                                if ($state) {
+                                    $membership = Membership::with('member')->find($state);
+                                    if ($membership) {
+                                        $set('member_id', $membership->member_id);
+                                    }
+                                }
+                            }),
                         
                         Forms\Components\Select::make('member_id')
                             ->label('Membre')
                             ->options(Member::active()->get()->pluck('full_name', 'id'))
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->disabled()
+                            ->dehydrated(),
                         
                         Forms\Components\Select::make('type')
                             ->label('Type de Paiement')
