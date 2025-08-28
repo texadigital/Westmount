@@ -14,18 +14,14 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrateur Westmount',
-            'email' => 'admin@westmount.ca',
-            'password' => Hash::make('password123'),
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@westmount.ca'],
+            [
+                'name' => 'Administrateur Westmount',
+                'password' => Hash::make('password123'),
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
 
-            'email' => 'admin@westmount.ca',
-            'password' => Hash::make('password123'),
-            'email_verified_at' => now(),
-        ]);
-    }
-}
