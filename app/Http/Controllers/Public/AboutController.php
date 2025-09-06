@@ -13,8 +13,8 @@ class AboutController extends Controller
     public function index()
     {
         // Get dynamic content for about page
-        $content = PageContent::getPageContent('about');
+        $pageContent = PageContent::getPageContent('about');
         
-        return view('public.about', compact('content'));
+        return view('public.about', compact('pageContent'));
     }
 }

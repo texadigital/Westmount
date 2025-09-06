@@ -16,9 +16,9 @@ class ContactController extends Controller
     public function index()
     {
         // Get dynamic content for contact page
-        $content = PageContent::getPageContent('contact');
+        $pageContent = PageContent::getPageContent('contact');
         
-        return view('public.contact', compact('content'));
+        return view('public.contact', compact('pageContent'));
     }
 
     /**

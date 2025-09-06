@@ -9,10 +9,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div class="text-center">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                    {{ $content['hero']->where('key', 'title')->first()->value ?? 'Solidarité & Entraide' }}
+                    {{ $content->title ?? 'Solidarité & Entraide' }}
                 </h1>
                 <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                    {{ $content['hero']->where('key', 'description')->first()->value ?? 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.' }}
+                    {{ $content->content ? strip_tags($content->content) : 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.' }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="{{ route('public.registration.form') }}" 
@@ -58,9 +58,9 @@
     <section id="about" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">{{ $content['about']->where('key', 'title')->first()->value ?? 'À propos de nous' }}</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">{{ $content->title ?? 'À propos de nous' }}</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    {{ $content['about']->where('key', 'description')->first()->value ?? 'L\'Association Westmount est une organisation d\'entraide et de solidarité qui accompagne ses membres dans les moments difficiles de la vie.' }}
+                    {{ $content->content ? strip_tags($content->content) : 'L\'Association Westmount est une organisation d\'entraide et de solidarité qui accompagne ses membres dans les moments difficiles de la vie.' }}
                 </p>
             </div>
             
