@@ -23,6 +23,14 @@ Route::get('/about', [App\Http\Controllers\Public\AboutController::class, 'index
 Route::get('/contact', [App\Http\Controllers\Public\ContactController::class, 'index'])->name('public.contact');
 Route::post('/contact', [App\Http\Controllers\Public\ContactController::class, 'send'])->name('public.contact.send');
 
+// Additional public pages
+Route::get('/services', [App\Http\Controllers\Public\ServicesController::class, 'index'])->name('public.services');
+Route::get('/contributions-deces', [App\Http\Controllers\Public\DeathContributionsController::class, 'index'])->name('public.death-contributions');
+Route::get('/parrainage', [App\Http\Controllers\Public\SponsorshipController::class, 'index'])->name('public.sponsorship');
+Route::get('/gestion-en-ligne', [App\Http\Controllers\Public\OnlineManagementController::class, 'index'])->name('public.online-management');
+Route::get('/support-technique', [App\Http\Controllers\Public\TechnicalSupportController::class, 'index'])->name('public.technical-support');
+Route::get('/faq', [App\Http\Controllers\Public\FAQController::class, 'index'])->name('public.faq');
+
 // Routes d'enregistrement public
 Route::prefix('register')->name('public.registration.')->group(function () {
     Route::get('/', [App\Http\Controllers\Public\RegistrationController::class, 'showRegistrationForm'])->name('form');

@@ -96,6 +96,27 @@
                            class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition duration-300 {{ request()->routeIs('public.about') ? 'text-primary font-semibold' : '' }}">
                             À propos
                         </a>
+                        
+                        <!-- Services Dropdown -->
+                        <div class="relative group">
+                            <button class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center">
+                                Services
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                                <div class="py-1">
+                                    <a href="{{ route('public.services') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Services</a>
+                                    <a href="{{ route('public.death-contributions') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Contributions Décès</a>
+                                    <a href="{{ route('public.sponsorship') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Système de Parrainage</a>
+                                    <a href="{{ route('public.online-management') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gestion en Ligne</a>
+                                    <a href="{{ route('public.technical-support') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Technique</a>
+                                    <a href="{{ route('public.faq') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">FAQ</a>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <a href="{{ route('public.contact') }}" 
                            class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition duration-300 {{ request()->routeIs('public.contact') ? 'text-primary font-semibold' : '' }}">
                             Contact
@@ -130,6 +151,36 @@
                    class="text-gray-500 hover:text-primary block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.about') ? 'text-primary font-semibold' : '' }}">
                     À propos
                 </a>
+                
+                <!-- Services Section -->
+                <div class="px-3 py-2">
+                    <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Services</div>
+                </div>
+                <a href="{{ route('public.services') }}" 
+                   class="text-gray-500 hover:text-primary block px-6 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.services') ? 'text-primary font-semibold' : '' }}">
+                    Services
+                </a>
+                <a href="{{ route('public.death-contributions') }}" 
+                   class="text-gray-500 hover:text-primary block px-6 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.death-contributions') ? 'text-primary font-semibold' : '' }}">
+                    Contributions Décès
+                </a>
+                <a href="{{ route('public.sponsorship') }}" 
+                   class="text-gray-500 hover:text-primary block px-6 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.sponsorship') ? 'text-primary font-semibold' : '' }}">
+                    Système de Parrainage
+                </a>
+                <a href="{{ route('public.online-management') }}" 
+                   class="text-gray-500 hover:text-primary block px-6 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.online-management') ? 'text-primary font-semibold' : '' }}">
+                    Gestion en Ligne
+                </a>
+                <a href="{{ route('public.technical-support') }}" 
+                   class="text-gray-500 hover:text-primary block px-6 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.technical-support') ? 'text-primary font-semibold' : '' }}">
+                    Support Technique
+                </a>
+                <a href="{{ route('public.faq') }}" 
+                   class="text-gray-500 hover:text-primary block px-6 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.faq') ? 'text-primary font-semibold' : '' }}">
+                    FAQ
+                </a>
+                
                 <a href="{{ route('public.contact') }}" 
                    class="text-gray-500 hover:text-primary block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.contact') ? 'text-primary font-semibold' : '' }}">
                     Contact
