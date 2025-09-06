@@ -66,3 +66,4 @@ echo '<p>All public controllers have been updated to use $pageContent variable.<
 echo '<p><a href="/" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Test Home Page</a></p>';
 echo '<p><a href="/about" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Test About Page</a></p>';
 ?>
+

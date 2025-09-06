@@ -166,3 +166,4 @@ echo '<li><a href="/support-technique" style="color: #007bff;">Technical Support
 echo '<li><a href="/faq" style="color: #007bff;">FAQ Page</a></li>';
 echo '</ul>';
 ?>
+

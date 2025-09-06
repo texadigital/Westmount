@@ -79,6 +79,20 @@
                     </button>
                 </div>
 
+                <!-- Bouton d'inscription -->
+                <div class="text-center">
+                    <p class="text-sm text-gray-600 mb-4">
+                        Pas encore membre ?
+                    </p>
+                    <a href="{{ route('public.registration.form') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                        </svg>
+                        S'inscrire
+                    </a>
+                </div>
+
                 <!-- Informations d'aide -->
                 <div class="text-center">
                     <p class="text-xs text-gray-500">

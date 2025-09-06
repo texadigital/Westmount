@@ -66,3 +66,17 @@ class WelcomeMemberNotification extends Notification implements ShouldQueue
         ];
     }
 }
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return [
+            'member_id' => $this->member->id,
+            'member_number' => $this->member->member_number,
+            'message' => 'Bienvenue dans l\'association !',
+            'type' => 'welcome_member',
+        ];
+    }
+}
+

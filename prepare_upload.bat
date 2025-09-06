@@ -51,3 +51,4 @@ echo 3. Set proper permissions
 echo 4. Run database migrations
 echo.
 pause
+

@@ -352,3 +352,4 @@ COMMIT;
 -- ✅ All new page content structure
 -- ✅ Updated member types with correct contribution rates
 -- ✅ Complete foreign key relationships
+

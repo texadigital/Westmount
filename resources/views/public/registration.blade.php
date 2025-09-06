@@ -193,6 +193,20 @@
                         </button>
                     </div>
                 </form>
+
+                <!-- Bouton de connexion -->
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600 mb-4">
+                        Déjà membre ?
+                    </p>
+                    <a href="{{ route('member.login') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
+                        Se connecter
+                    </a>
+                </div>
             </div>
         </div>
     </div>

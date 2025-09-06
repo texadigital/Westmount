@@ -104,3 +104,4 @@ try {
     echo '<p style="color: red;">❌ Error: ' . htmlspecialchars($e->getMessage()) . '</p>';
 }
 ?>
+

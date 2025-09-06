@@ -37,3 +37,4 @@ INSERT IGNORE INTO `users` (`id`, `name`, `email`, `email_verified_at`, `passwor
 (1, 'Admin Westmount', 'admin@westmount.ca', NOW(), '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NOW(), NOW());
 
 COMMIT;
+
