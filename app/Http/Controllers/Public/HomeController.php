@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\MemberType;
 use App\Models\Fund;
 use App\Models\Membership;
+use App\Models\PageContent;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -26,6 +27,9 @@ class HomeController extends Controller
         // Get member types for pricing display
         $memberTypes = MemberType::active()->get();
 
-        return view('public.home', compact('stats', 'memberTypes'));
+        // Get dynamic content for home page
+        $content = PageContent::getPageContent('home');
+
+        return view('public.home', compact('stats', 'memberTypes', 'content'));
     }
 }

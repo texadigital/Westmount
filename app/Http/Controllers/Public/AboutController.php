@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\PageContent;
 
 class AboutController extends Controller
 {
@@ -11,6 +12,9 @@ class AboutController extends Controller
      */
     public function index()
     {
-        return view('public.about');
+        // Get dynamic content for about page
+        $content = PageContent::getPageContent('about');
+        
+        return view('public.about', compact('content'));
     }
 }

@@ -7,9 +7,9 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-primary to-blue-600 text-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">À propos de nous</h1>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ $content['hero']->where('key', 'title')->first()->value ?? 'À propos de nous' }}</h1>
             <p class="text-xl md:text-2xl max-w-3xl mx-auto">
-                Découvrez l'histoire et les valeurs qui nous animent depuis plus de 25 ans
+                {{ $content['hero']->where('key', 'subtitle')->first()->value ?? 'Découvrez l\'histoire et les valeurs qui nous animent depuis plus de 25 ans' }}
             </p>
         </div>
     </section>
@@ -19,18 +19,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Notre Histoire</h2>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">{{ $content['history']->where('key', 'title')->first()->value ?? 'Notre Histoire' }}</h2>
                     <p class="text-lg text-gray-600 mb-6">
-                        L'Association Westmount a été fondée en 1998 par un groupe de familles 
-                        montréalaises qui souhaitaient créer un système d'entraide mutuelle. 
-                        Face aux coûts élevés des funérailles et au manque de soutien financier 
-                        lors des décès, ils ont décidé d'unir leurs forces.
-                    </p>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Depuis plus de 25 ans, nous avons aidé des centaines de familles à 
-                        faire face aux moments les plus difficiles de leur vie. Notre communauté 
-                        s'est agrandie, mais nos valeurs fondamentales restent les mêmes : 
-                        solidarité, transparence et respect.
+                        {{ $content['history']->where('key', 'content')->first()->value ?? 'L\'Association Westmount a été fondée en 1998 par un groupe de familles montréalaises qui souhaitaient créer un système d\'entraide mutuelle. Face aux coûts élevés des funérailles et au manque de soutien financier lors des décès, ils ont décidé d\'unir leurs forces.' }}
                     </p>
                     <div class="bg-gray-50 p-6 rounded-lg">
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Nos Fondateurs</h3>

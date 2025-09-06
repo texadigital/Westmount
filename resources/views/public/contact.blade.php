@@ -7,9 +7,9 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-primary to-blue-600 text-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">Contactez-nous</h1>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ $content['hero']->where('key', 'title')->first()->value ?? 'Contactez-nous' }}</h1>
             <p class="text-xl md:text-2xl max-w-3xl mx-auto">
-                Nous sommes là pour répondre à vos questions et vous accompagner dans votre démarche
+                {{ $content['hero']->where('key', 'subtitle')->first()->value ?? 'Nous sommes là pour répondre à vos questions et vous accompagner dans votre démarche' }}
             </p>
         </div>
     </section>
@@ -141,8 +141,8 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Téléphone</h3>
                                 <p class="text-gray-600">
-                                    <a href="tel:+15141234567" class="hover:text-primary">(514) 123-4567</a><br>
-                                    <span class="text-sm text-gray-500">Lun - Ven: 9h00 - 17h00</span>
+                                    <a href="tel:{{ $content['info']->where('key', 'phone')->first()->value ?? '+1 (514) 555-0123' }}" class="hover:text-primary">{{ $content['info']->where('key', 'phone')->first()->value ?? '(514) 123-4567' }}</a><br>
+                                    <span class="text-sm text-gray-500">{{ $content['info']->where('key', 'hours')->first()->value ?? 'Lun - Ven: 9h00 - 17h00' }}</span>
                                 </p>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Email</h3>
                                 <p class="text-gray-600">
-                                    <a href="mailto:info@associationwestmount.com" class="hover:text-primary">info@associationwestmount.com</a><br>
+                                    <a href="mailto:{{ $content['info']->where('key', 'email')->first()->value ?? 'contact@associationwestmount.com' }}" class="hover:text-primary">{{ $content['info']->where('key', 'email')->first()->value ?? 'info@associationwestmount.com' }}</a><br>
                                     <span class="text-sm text-gray-500">Réponse sous 24h</span>
                                 </p>
                             </div>

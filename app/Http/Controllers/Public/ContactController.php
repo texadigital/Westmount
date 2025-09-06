@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\PageContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +15,10 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('public.contact');
+        // Get dynamic content for contact page
+        $content = PageContent::getPageContent('contact');
+        
+        return view('public.contact', compact('content'));
     }
 
     /**
