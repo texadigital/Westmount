@@ -14,7 +14,10 @@ class PaymentService
 {
     public function __construct()
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        // Only initialize Stripe if configured
+        if (config('services.stripe.secret')) {
+            Stripe::setApiKey(config('services.stripe.secret'));
+        }
     }
 
     /**
@@ -22,40 +25,44 @@ class PaymentService
      */
     public function createAdhesionPayment(Member $member, Membership $membership, float $amount): Payment
     {
-        try {
-            // Créer l'intention de paiement Stripe
-            $paymentIntent = PaymentIntent::create([
-                'amount' => (int)($amount * 100), // Stripe utilise les centimes
-                'currency' => 'cad',
-                'metadata' => [
+        $paymentIntentId = null;
+        
+        // Only create Stripe payment intent if Stripe is configured
+        if (config('services.stripe.secret')) {
+            try {
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => (int)($amount * 100), // Stripe utilise les centimes
+                    'currency' => 'cad',
+                    'metadata' => [
+                        'member_id' => $member->id,
+                        'membership_id' => $membership->id,
+                        'type' => 'adhesion',
+                    ],
+                ]);
+                $paymentIntentId = $paymentIntent->id;
+            } catch (ApiErrorException $e) {
+                Log::error('Erreur Stripe lors de la création du paiement', [
                     'member_id' => $member->id,
-                    'membership_id' => $membership->id,
-                    'type' => 'adhesion',
-                ],
-            ]);
-
-            // Créer le paiement en base
-            $payment = Payment::create([
-                'member_id' => $member->id,
-                'membership_id' => $membership->id,
-                'type' => 'adhesion',
-                'amount' => $amount,
-                'currency' => 'CAD',
-                'status' => 'pending',
-                'payment_method' => 'stripe',
-                'stripe_payment_intent_id' => $paymentIntent->id,
-                'description' => 'Paiement d\'adhésion - ' . $member->full_name,
-            ]);
-
-            return $payment;
-
-        } catch (ApiErrorException $e) {
-            Log::error('Erreur Stripe lors de la création du paiement', [
-                'member_id' => $member->id,
-                'error' => $e->getMessage(),
-            ]);
-            throw $e;
+                    'error' => $e->getMessage(),
+                ]);
+                throw $e;
+            }
         }
+
+        // Créer le paiement en base
+        $payment = Payment::create([
+            'member_id' => $member->id,
+            'membership_id' => $membership->id,
+            'type' => 'adhesion',
+            'amount' => $amount,
+            'currency' => 'CAD',
+            'status' => 'pending',
+            'payment_method' => config('services.stripe.secret') ? 'stripe' : 'bank_transfer',
+            'stripe_payment_intent_id' => $paymentIntentId,
+            'description' => 'Paiement d\'adhésion - ' . $member->full_name,
+        ]);
+
+        return $payment;
     }
 
     /**
@@ -63,39 +70,43 @@ class PaymentService
      */
     public function createContributionPayment(Member $member, float $amount, string $description = null): Payment
     {
-        try {
-            // Créer l'intention de paiement Stripe
-            $paymentIntent = PaymentIntent::create([
-                'amount' => (int)($amount * 100),
-                'currency' => 'cad',
-                'metadata' => [
+        $paymentIntentId = null;
+        
+        // Only create Stripe payment intent if Stripe is configured
+        if (config('services.stripe.secret')) {
+            try {
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => (int)($amount * 100),
+                    'currency' => 'cad',
+                    'metadata' => [
+                        'member_id' => $member->id,
+                        'type' => 'contribution',
+                    ],
+                ]);
+                $paymentIntentId = $paymentIntent->id;
+            } catch (ApiErrorException $e) {
+                Log::error('Erreur Stripe lors de la création du paiement de contribution', [
                     'member_id' => $member->id,
-                    'type' => 'contribution',
-                ],
-            ]);
-
-            // Créer le paiement en base
-            $payment = Payment::create([
-                'member_id' => $member->id,
-                'membership_id' => $member->activeMembership?->id,
-                'type' => 'contribution',
-                'amount' => $amount,
-                'currency' => 'CAD',
-                'status' => 'pending',
-                'payment_method' => 'stripe',
-                'stripe_payment_intent_id' => $paymentIntent->id,
-                'description' => $description ?? 'Contribution - ' . $member->full_name,
-            ]);
-
-            return $payment;
-
-        } catch (ApiErrorException $e) {
-            Log::error('Erreur Stripe lors de la création du paiement de contribution', [
-                'member_id' => $member->id,
-                'error' => $e->getMessage(),
-            ]);
-            throw $e;
+                    'error' => $e->getMessage(),
+                ]);
+                throw $e;
+            }
         }
+
+        // Créer le paiement en base
+        $payment = Payment::create([
+            'member_id' => $member->id,
+            'membership_id' => $member->activeMembership?->id,
+            'type' => 'contribution',
+            'amount' => $amount,
+            'currency' => 'CAD',
+            'status' => 'pending',
+            'payment_method' => config('services.stripe.secret') ? 'stripe' : 'bank_transfer',
+            'stripe_payment_intent_id' => $paymentIntentId,
+            'description' => $description ?? 'Contribution - ' . $member->full_name,
+        ]);
+
+        return $payment;
     }
 
     /**

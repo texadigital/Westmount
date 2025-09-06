@@ -79,11 +79,20 @@ class PaymentProcessingController extends Controller
                 $activeMembership->member->memberType->adhesion_fee
             );
 
-            return response()->json([
+            $response = [
                 'success' => true,
-                'payment_intent_id' => $payment->stripe_payment_intent_id,
-                'client_secret' => $this->getClientSecret($payment->stripe_payment_intent_id),
-            ]);
+                'payment_id' => $payment->id,
+                'amount' => $payment->amount,
+                'currency' => $payment->currency,
+            ];
+
+            // Only add Stripe details if configured
+            if ($payment->stripe_payment_intent_id) {
+                $response['payment_intent_id'] = $payment->stripe_payment_intent_id;
+                $response['client_secret'] = $this->getClientSecret($payment->stripe_payment_intent_id);
+            }
+
+            return response()->json($response);
 
         } catch (\Exception $e) {
             Log::error('Erreur lors de la création du paiement d\'adhésion', [
@@ -117,11 +126,20 @@ class PaymentProcessingController extends Controller
                 $request->description
             );
 
-            return response()->json([
+            $response = [
                 'success' => true,
-                'payment_intent_id' => $payment->stripe_payment_intent_id,
-                'client_secret' => $this->getClientSecret($payment->stripe_payment_intent_id),
-            ]);
+                'payment_id' => $payment->id,
+                'amount' => $payment->amount,
+                'currency' => $payment->currency,
+            ];
+
+            // Only add Stripe details if configured
+            if ($payment->stripe_payment_intent_id) {
+                $response['payment_intent_id'] = $payment->stripe_payment_intent_id;
+                $response['client_secret'] = $this->getClientSecret($payment->stripe_payment_intent_id);
+            }
+
+            return response()->json($response);
 
         } catch (\Exception $e) {
             Log::error('Erreur lors de la création du paiement de contribution', [

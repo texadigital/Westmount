@@ -10,6 +10,25 @@
         <p class="mt-2 text-gray-600">Détails de votre adhésion à l'Association Westmount.</p>
     </div>
 
+    <!-- Message de confirmation de paiement -->
+    @if(request('payment') === 'created')
+    <div class="mb-6 bg-green-50 border border-green-200 rounded-md p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-green-800">Paiement créé avec succès</h3>
+                <div class="mt-2 text-sm text-green-700">
+                    <p>Votre paiement a été enregistré. Veuillez effectuer le virement bancaire selon les informations fournies. Une fois le virement reçu, votre paiement sera confirmé.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @if($activeMembership)
     <!-- Informations de l'adhésion -->
     <div class="bg-white shadow rounded-lg mb-8">
@@ -67,6 +86,47 @@
                     <dd class="mt-1 text-lg font-medium {{ $activeMembership->amount_due > 0 ? 'text-red-600' : 'text-green-600' }}">
                         {{ number_format($activeMembership->amount_due, 2) }} CAD
                     </dd>
+                </div>
+            </div>
+            
+            <!-- Actions de paiement -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex flex-wrap gap-4">
+                    @php
+                        $pendingAdhesionPayment = $activeMembership->payments()
+                            ->where('type', 'adhesion')
+                            ->where('status', 'pending')
+                            ->first();
+                    @endphp
+                    
+                    @if($pendingAdhesionPayment)
+                    <a href="{{ route('member.payment.adhesion') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                        Payer l'adhésion ({{ number_format($member->memberType->adhesion_fee, 2) }} CAD)
+                    </a>
+                    @endif
+                    
+                    @if($contributions->count() > 0)
+                    <a href="{{ route('member.payment.contribution') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Payer les contributions ({{ $contributions->count() }} en attente)
+                    </a>
+                    @endif
+                    
+                    @if(!$pendingAdhesionPayment && $contributions->count() == 0)
+                    <div class="text-sm text-gray-500 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Aucun paiement en attente
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
