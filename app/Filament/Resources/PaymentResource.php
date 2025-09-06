@@ -110,11 +110,11 @@ class PaymentResource extends Resource
                                 'stripe' => 'Stripe',
                                 'paypal' => 'PayPal',
                                 'bank_transfer' => 'Virement Bancaire',
-                                'cash' => 'Espèces',
+                                'interac' => 'Interac',
                                 'check' => 'Chèque',
                             ])
                             ->required()
-                            ->default('stripe'),
+                            ->default('bank_transfer'),
                         
                         Forms\Components\TextInput::make('stripe_payment_intent_id')
                             ->label('ID Intent Stripe')
@@ -209,7 +209,7 @@ class PaymentResource extends Resource
                         'stripe' => 'Stripe',
                         'paypal' => 'PayPal',
                         'bank_transfer' => 'Virement',
-                        'cash' => 'Espèces',
+                        'interac' => 'Interac',
                         'check' => 'Chèque',
                         default => $state,
                     }),

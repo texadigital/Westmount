@@ -182,6 +182,12 @@ class OrganizationResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->where('member_count', '>', 0)),
             ])
             ->actions([
+                Tables\Actions\Action::make('association_fees')
+                    ->label('Calcul des Frais')
+                    ->icon('heroicon-o-calculator')
+                    ->color('info')
+                    ->url(fn (Organization $record): string => route('filament.admin.resources.organizations.association-fees', $record))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -206,6 +212,7 @@ class OrganizationResource extends Resource
             'index' => Pages\ListOrganizations::route('/'),
             'create' => Pages\CreateOrganization::route('/create'),
             'edit' => Pages\EditOrganization::route('/{record}/edit'),
+            'association-fees' => Pages\AssociationFees::route('/{record}/association-fees'),
         ];
     }
 }

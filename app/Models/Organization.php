@@ -65,17 +65,41 @@ class Organization extends Model
     }
 
     /**
-     * Calculer le total des frais
+     * Calculer le total des frais d'adhésion pour les associations
+     * Pour les associations: 50$ × nombre de membres
+     */
+    public function calculateAdhesionFees(): float
+    {
+        $memberCount = $this->calculateMemberCount();
+        return $memberCount * 50.00; // 50$ par membre
+    }
+
+    /**
+     * Calculer le total des contributions pour les associations
+     * Contribution = (contribution de la catégorie × nombre de membres selon la catégorie)
+     */
+    public function calculateContributionFees(): float
+    {
+        $members = $this->members()
+            ->active()
+            ->with('memberType')
+            ->get();
+
+        $totalContribution = 0;
+
+        foreach ($members as $member) {
+            $totalContribution += $member->memberType->death_contribution;
+        }
+
+        return $totalContribution;
+    }
+
+    /**
+     * Calculer le total des frais (adhésion + contributions)
      */
     public function calculateTotalFees(): float
     {
-        return $this->members()
-            ->active()
-            ->with('memberType')
-            ->get()
-            ->sum(function ($member) {
-                return $member->memberType->adhesion_fee + $member->memberType->death_contribution;
-            });
+        return $this->calculateAdhesionFees() + $this->calculateContributionFees();
     }
 
     /**
@@ -103,6 +127,51 @@ class Organization extends Model
     public function getFormattedTotalFeesAttribute(): string
     {
         return number_format($this->total_fees, 2) . ' CAD';
+    }
+
+    /**
+     * Obtenir la répartition des frais par type de membre
+     */
+    public function getFeesBreakdown(): array
+    {
+        $members = $this->members()
+            ->active()
+            ->with('memberType')
+            ->get();
+
+        $breakdown = [
+            'régulier' => ['count' => 0, 'adhesion' => 0, 'contribution' => 0],
+            'senior' => ['count' => 0, 'adhesion' => 0, 'contribution' => 0],
+            'junior' => ['count' => 0, 'adhesion' => 0, 'contribution' => 0],
+            'association' => ['count' => 0, 'adhesion' => 0, 'contribution' => 0],
+        ];
+
+        foreach ($members as $member) {
+            $type = $member->memberType->name;
+            if (isset($breakdown[$type])) {
+                $breakdown[$type]['count']++;
+                $breakdown[$type]['adhesion'] += 50.00; // 50$ par membre
+                $breakdown[$type]['contribution'] += $member->memberType->death_contribution;
+            }
+        }
+
+        return $breakdown;
+    }
+
+    /**
+     * Obtenir le résumé des frais
+     */
+    public function getFeesSummary(): array
+    {
+        $breakdown = $this->getFeesBreakdown();
+        
+        return [
+            'total_members' => $this->calculateMemberCount(),
+            'total_adhesion' => $this->calculateAdhesionFees(),
+            'total_contribution' => $this->calculateContributionFees(),
+            'total_fees' => $this->calculateTotalFees(),
+            'breakdown' => $breakdown,
+        ];
     }
 
     /**
