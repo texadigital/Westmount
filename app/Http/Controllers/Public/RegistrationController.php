@@ -154,7 +154,7 @@ class RegistrationController extends Controller
             DB::commit();
 
             // Envoyer la notification de bienvenue
-            $member->notify(new WelcomeMemberNotification($member, $payment));
+            $member->notify(new WelcomeMemberNotification($member));
 
             return redirect()->route('public.registration.success')
                 ->with('success', 'Inscription réussie ! Votre numéro de membre est : ' . $member->member_number);

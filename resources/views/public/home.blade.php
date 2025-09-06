@@ -15,7 +15,7 @@
                     {{ $content['hero']->where('key', 'description')->first()->value ?? 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.' }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{{ route('register') }}" 
+                        <a href="{{ route('public.registration.form') }}" 
                            class="bg-white text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105">
                             <i class="fas fa-user-plus mr-2"></i>
                             Rejoindre l'Association
@@ -209,7 +209,7 @@
                         <li>• Accès complet aux services</li>
                         <li>• Support 24/7</li>
                     </ul>
-                    <a href="{{ route('register') }}" 
+                    <a href="{{ route('public.registration.form') }}" 
                        class="w-full bg-primary text-white hover:bg-blue-700 font-bold py-2 px-4 rounded-lg text-center block transition duration-300">
                         Choisir ce plan
                     </a>

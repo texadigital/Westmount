@@ -100,7 +100,7 @@
                            class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition duration-300 {{ request()->routeIs('public.contact') ? 'text-primary font-semibold' : '' }}">
                             Contact
                         </a>
-                        <a href="{{ route('register') }}" 
+                        <a href="{{ route('public.registration.form') }}" 
                            class="bg-primary text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300 transform hover:scale-105">
                             <i class="fas fa-user-plus mr-1"></i>
                             Rejoindre
@@ -134,7 +134,7 @@
                    class="text-gray-500 hover:text-primary block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('public.contact') ? 'text-primary font-semibold' : '' }}">
                     Contact
                 </a>
-                <a href="{{ route('register') }}" 
+                <a href="{{ route('public.registration.form') }}" 
                    class="bg-primary text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">
                     <i class="fas fa-user-plus mr-1"></i>
                     Rejoindre
@@ -187,7 +187,7 @@
                         <li><a href="{{ route('public.home') }}" class="text-gray-400 hover:text-white transition duration-300">Accueil</a></li>
                         <li><a href="{{ route('public.about') }}" class="text-gray-400 hover:text-white transition duration-300">À propos</a></li>
                         <li><a href="{{ route('public.contact') }}" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
-                        <li><a href="{{ route('register') }}" class="text-gray-400 hover:text-white transition duration-300">Rejoindre</a></li>
+                        <li><a href="{{ route('public.registration.form') }}" class="text-gray-400 hover:text-white transition duration-300">Rejoindre</a></li>
                         <li><a href="{{ route('member.login') }}" class="text-gray-400 hover:text-white transition duration-300">Connexion</a></li>
                     </ul>
                 </div>

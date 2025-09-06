@@ -15,7 +15,7 @@
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" action="{{ route('public.registration.register') }}">
                     @csrf
                     
                     @if($errors->any())
@@ -70,6 +70,66 @@
                                        value="{{ old('email') }}"
                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                        required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adresse -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Adresse</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label for="address" class="block text-sm font-medium text-gray-700">Adresse *</label>
+                                <input type="text" name="address" id="address" 
+                                       value="{{ old('address') }}"
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+
+                            <div>
+                                <label for="city" class="block text-sm font-medium text-gray-700">Ville *</label>
+                                <input type="text" name="city" id="city" 
+                                       value="{{ old('city') }}"
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+
+                            <div>
+                                <label for="province" class="block text-sm font-medium text-gray-700">Province *</label>
+                                <input type="text" name="province" id="province" 
+                                       value="{{ old('province') }}"
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+
+                            <div>
+                                <label for="postal_code" class="block text-sm font-medium text-gray-700">Code postal *</label>
+                                <input type="text" name="postal_code" id="postal_code" 
+                                       value="{{ old('postal_code') }}"
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+
+                            <div>
+                                <label for="country" class="block text-sm font-medium text-gray-700">Pays *</label>
+                                <input type="text" name="country" id="country" 
+                                       value="{{ old('country') }}"
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="canadian_status_proof" class="block text-sm font-medium text-gray-700">Preuve de statut canadien *</label>
+                                <select name="canadian_status_proof" id="canadian_status_proof" 
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        required>
+                                    <option value="">Sélectionner une option</option>
+                                    <option value="citizen" {{ old('canadian_status_proof') == 'citizen' ? 'selected' : '' }}>Citoyen canadien</option>
+                                    <option value="permanent_resident" {{ old('canadian_status_proof') == 'permanent_resident' ? 'selected' : '' }}>Résident permanent</option>
+                                    <option value="work_permit" {{ old('canadian_status_proof') == 'work_permit' ? 'selected' : '' }}>Permis de travail</option>
+                                    <option value="study_permit" {{ old('canadian_status_proof') == 'study_permit' ? 'selected' : '' }}>Permis d'études</option>
+                                    <option value="visitor" {{ old('canadian_status_proof') == 'visitor' ? 'selected' : '' }}>Visiteur</option>
+                                </select>
                             </div>
                         </div>
                     </div>

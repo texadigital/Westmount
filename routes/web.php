@@ -65,7 +65,7 @@ Route::prefix('member')->name('member.')->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php'; // Commented out - using custom member auth system
 
 // Webhook Stripe (route publique)
 Route::post('webhook/stripe', [App\Http\Controllers\Member\PaymentProcessingController::class, 'webhook'])->name('webhook.stripe');
