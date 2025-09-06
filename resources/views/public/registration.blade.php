@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - Association Westmount</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50">
-    <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+@extends('layouts.public')
+
+@section('title', 'Inscription - Association Westmount')
+@section('description', 'Rejoignez l\'Association Westmount en remplissant notre formulaire d\'inscription simple et sécurisé.')
+@section('content')
+<div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 class="text-3xl font-bold text-gray-900 text-center">
                 Association Westmount
@@ -19,7 +15,7 @@
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                <form method="POST" action="{{ route('public.registration.register') }}">
+                <form method="POST" action="{{ route('register') }}">
                     @csrf
                     
                     @if($errors->any())
@@ -140,5 +136,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection

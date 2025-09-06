@@ -66,7 +66,7 @@
                             Se connecter
                         </a>
                         
-                        <a href="{{ route('public.registration.form') }}" 
+                        <a href="{{ route('register') }}" 
                            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out inline-block">
                             Nouvelle inscription
                         </a>

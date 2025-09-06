@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Membre - Association Westmount</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+@extends('layouts.public')
+
+@section('title', 'Connexion Membre - Association Westmount')
+@section('description', 'Connectez-vous à votre espace membre pour gérer vos adhésions, paiements et contributions.')
+@section('content')
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <!-- Logo et titre -->
             <div class="text-center">
@@ -102,5 +97,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection

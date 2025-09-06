@@ -17,9 +17,11 @@ use App\Http\Controllers\Member\PaymentController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public routes
+Route::get('/', [App\Http\Controllers\Public\HomeController::class, 'index'])->name('public.home');
+Route::get('/about', [App\Http\Controllers\Public\AboutController::class, 'index'])->name('public.about');
+Route::get('/contact', [App\Http\Controllers\Public\ContactController::class, 'index'])->name('public.contact');
+Route::post('/contact', [App\Http\Controllers\Public\ContactController::class, 'send'])->name('public.contact.send');
 
 // Routes d'enregistrement public
 Route::prefix('register')->name('public.registration.')->group(function () {
