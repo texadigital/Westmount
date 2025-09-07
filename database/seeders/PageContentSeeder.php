@@ -16,75 +16,40 @@ class PageContentSeeder extends Seeder
         // Clear existing content
         PageContent::truncate();
 
-        // Home page content - matching the actual home page structure
+        // Home page content - using the correct structure for the model
         $homeContent = [
-            // Hero section
-            ['page' => 'home', 'section' => 'hero', 'key' => 'title', 'value' => 'Solidarité & Entraide', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'hero', 'key' => 'description', 'value' => 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.', 'type' => 'text', 'sort_order' => 2],
-            
-            // About section
-            ['page' => 'home', 'section' => 'about', 'key' => 'title', 'value' => 'À propos de nous', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'about', 'key' => 'description', 'value' => 'L\'Association Westmount est une organisation d\'entraide et de solidarité qui accompagne ses membres dans les moments difficiles de la vie.', 'type' => 'text', 'sort_order' => 2],
-            
-            // Mission section
-            ['page' => 'home', 'section' => 'mission', 'key' => 'title', 'value' => 'Notre Mission', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'mission', 'key' => 'content', 'value' => 'Offrir un soutien financier et moral à nos membres en cas de décès d\'un proche, en créant un réseau d\'entraide basé sur la solidarité et la fraternité.', 'type' => 'text', 'sort_order' => 2],
-            
-            // Vision section
-            ['page' => 'home', 'section' => 'vision', 'key' => 'title', 'value' => 'Notre Vision', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'vision', 'key' => 'content', 'value' => 'Devenir la référence en matière d\'entraide communautaire, en créant un modèle de solidarité qui inspire d\'autres communautés.', 'type' => 'text', 'sort_order' => 2],
-            
-            // Services section
-            ['page' => 'home', 'section' => 'services', 'key' => 'title', 'value' => 'Nos Services', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'services', 'key' => 'description', 'value' => 'Nous offrons une gamme complète de services pour soutenir nos membres', 'type' => 'text', 'sort_order' => 2],
-            
-            // Service 1
-            ['page' => 'home', 'section' => 'service1', 'key' => 'title', 'value' => 'Soutien Financier', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'service1', 'key' => 'description', 'value' => 'Aide financière immédiate en cas de décès d\'un membre de la famille', 'type' => 'text', 'sort_order' => 2],
-            
-            // Service 2
-            ['page' => 'home', 'section' => 'service2', 'key' => 'title', 'value' => 'Accompagnement Moral', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'service2', 'key' => 'description', 'value' => 'Soutien psychologique et accompagnement pendant les moments difficiles', 'type' => 'text', 'sort_order' => 2],
-            
-            // Service 3
-            ['page' => 'home', 'section' => 'service3', 'key' => 'title', 'value' => 'Réseau Communautaire', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'service3', 'key' => 'description', 'value' => 'Mise en relation avec d\'autres membres pour créer des liens durables', 'type' => 'text', 'sort_order' => 2],
-            
-            // CTA section
-            ['page' => 'home', 'section' => 'cta', 'key' => 'title', 'value' => 'Rejoignez notre communauté', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'home', 'section' => 'cta', 'key' => 'description', 'value' => 'Faites partie d\'une communauté qui se soutient mutuellement dans les moments difficiles', 'type' => 'text', 'sort_order' => 2],
+            [
+                'page' => 'home',
+                'title' => 'Solidarité & Entraide',
+                'content' => '<h2>À propos de nous</h2><p>L\'Association Westmount est une organisation d\'entraide et de solidarité qui accompagne ses membres dans les moments difficiles de la vie.</p><h2>Notre Mission</h2><p>Offrir un soutien financier et moral à nos membres en cas de décès d\'un proche, en créant un réseau d\'entraide basé sur la solidarité et la fraternité.</p><h2>Notre Vision</h2><p>Devenir la référence en matière d\'entraide communautaire, en créant un modèle de solidarité qui inspire d\'autres communautés.</p><h2>Nos Services</h2><p>Nous offrons une gamme complète de services pour soutenir nos membres</p><h3>Soutien Financier</h3><p>Aide financière immédiate en cas de décès d\'un membre de la famille</p><h3>Accompagnement Moral</h3><p>Soutien psychologique et accompagnement pendant les moments difficiles</p><h3>Réseau Communautaire</h3><p>Mise en relation avec d\'autres membres pour créer des liens durables</p><h2>Rejoignez notre communauté</h2><p>Faites partie d\'une communauté qui se soutient mutuellement dans les moments difficiles</p>',
+                'meta_title' => 'Association Westmount - Solidarité & Entraide',
+                'meta_description' => 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.',
+                'is_active' => true
+            ]
         ];
 
-        // About page content - matching the actual about page structure
+        // About page content - using the correct structure for the model
         $aboutContent = [
-            ['page' => 'about', 'section' => 'hero', 'key' => 'title', 'value' => 'À propos de l\'Association Westmount', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'about', 'section' => 'hero', 'key' => 'subtitle', 'value' => 'Notre histoire, notre mission, notre vision', 'type' => 'text', 'sort_order' => 2],
-            
-            ['page' => 'about', 'section' => 'history', 'key' => 'title', 'value' => 'Notre Histoire', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'about', 'section' => 'history', 'key' => 'content', 'value' => 'Fondée en 1998, l\'Association Westmount est née de la volonté de créer un réseau d\'entraide solide au sein de notre communauté. Depuis plus de 25 ans, nous avons aidé des centaines de familles à traverser les moments difficiles.', 'type' => 'text', 'sort_order' => 2],
-            
-            ['page' => 'about', 'section' => 'mission', 'key' => 'title', 'value' => 'Notre Mission', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'about', 'section' => 'mission', 'key' => 'content', 'value' => 'Offrir un soutien financier et moral à nos membres en cas de décès d\'un proche, en créant un réseau d\'entraide basé sur la solidarité et la fraternité.', 'type' => 'text', 'sort_order' => 2],
-            
-            ['page' => 'about', 'section' => 'vision', 'key' => 'title', 'value' => 'Notre Vision', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'about', 'section' => 'vision', 'key' => 'content', 'value' => 'Devenir la référence en matière d\'entraide communautaire, en créant un modèle de solidarité qui inspire d\'autres communautés.', 'type' => 'text', 'sort_order' => 2],
-            
-            ['page' => 'about', 'section' => 'values', 'key' => 'title', 'value' => 'Nos Valeurs', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'about', 'section' => 'values', 'key' => 'content', 'value' => 'Solidarité, Fraternité, Transparence, Respect, et Entraide sont les valeurs qui nous guident dans toutes nos actions.', 'type' => 'text', 'sort_order' => 2],
+            [
+                'page' => 'about',
+                'title' => 'À propos de l\'Association Westmount',
+                'content' => '<h2>Notre Histoire</h2><p>Fondée en 1998, l\'Association Westmount est née de la volonté de créer un réseau d\'entraide solide au sein de notre communauté. Depuis plus de 25 ans, nous avons aidé des centaines de familles à traverser les moments difficiles.</p><h2>Notre Mission</h2><p>Offrir un soutien financier et moral à nos membres en cas de décès d\'un proche, en créant un réseau d\'entraide basé sur la solidarité et la fraternité.</p><h2>Notre Vision</h2><p>Devenir la référence en matière d\'entraide communautaire, en créant un modèle de solidarité qui inspire d\'autres communautés.</p><h2>Nos Valeurs</h2><p>Solidarité, Fraternité, Transparence, Respect, et Entraide sont les valeurs qui nous guident dans toutes nos actions.</p>',
+                'meta_title' => 'À propos de l\'Association Westmount',
+                'meta_description' => 'Découvrez l\'histoire, la mission et les valeurs de l\'Association Westmount, une organisation d\'entraide communautaire.',
+                'is_active' => true
+            ]
         ];
 
-        // Contact page content - matching the actual contact page structure
+        // Contact page content - using the correct structure for the model
         $contactContent = [
-            ['page' => 'contact', 'section' => 'hero', 'key' => 'title', 'value' => 'Contactez-nous', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'contact', 'section' => 'hero', 'key' => 'subtitle', 'value' => 'Nous sommes là pour vous aider', 'type' => 'text', 'sort_order' => 2],
-            
-            ['page' => 'contact', 'section' => 'info', 'key' => 'phone', 'value' => '+1 (514) 555-0123', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'contact', 'section' => 'info', 'key' => 'email', 'value' => 'contact@associationwestmount.com', 'type' => 'text', 'sort_order' => 2],
-            ['page' => 'contact', 'section' => 'info', 'key' => 'address', 'value' => '123 Rue Westmount, Montréal, QC H3Z 1T1', 'type' => 'text', 'sort_order' => 3],
-            ['page' => 'contact', 'section' => 'info', 'key' => 'hours', 'value' => 'Lun-Ven: 9h00-17h00', 'type' => 'text', 'sort_order' => 4],
-            
-            ['page' => 'contact', 'section' => 'emergency', 'key' => 'title', 'value' => 'Urgences', 'type' => 'text', 'sort_order' => 1],
-            ['page' => 'contact', 'section' => 'emergency', 'key' => 'description', 'value' => 'Pour les urgences en dehors des heures d\'ouverture, contactez-nous par email et nous vous répondrons dans les plus brefs délais.', 'type' => 'text', 'sort_order' => 2],
+            [
+                'page' => 'contact',
+                'title' => 'Contactez-nous',
+                'content' => '<h2>Nous sommes là pour vous aider</h2><h3>Informations de contact</h3><p><strong>Téléphone:</strong> +1 (514) 555-0123</p><p><strong>Email:</strong> contact@associationwestmount.com</p><p><strong>Adresse:</strong> 123 Rue Westmount, Montréal, QC H3Z 1T1</p><p><strong>Heures d\'ouverture:</strong> Lun-Ven: 9h00-17h00</p><h3>Urgences</h3><p>Pour les urgences en dehors des heures d\'ouverture, contactez-nous par email et nous vous répondrons dans les plus brefs délais.</p>',
+                'meta_title' => 'Contactez-nous - Association Westmount',
+                'meta_description' => 'Contactez l\'Association Westmount pour toute question ou information. Nous sommes là pour vous aider.',
+                'is_active' => true
+            ]
         ];
 
         // Insert all content

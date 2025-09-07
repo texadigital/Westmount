@@ -124,7 +124,7 @@ class RoleResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->visible(fn ($records) => $records->where('is_system', false)->count() > 0),
+                        ->visible(fn ($records) => $records && $records->where('is_system', false)->count() > 0),
                 ]),
             ]);
     }

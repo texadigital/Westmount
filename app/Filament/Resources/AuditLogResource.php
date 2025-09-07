@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AuditLogResource extends Resource
 {
@@ -102,9 +103,18 @@ class AuditLogResource extends Resource
                     ->searchable()
                     ->sortable(),
                 
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('user_id')
                     ->label('Utilisateur')
-                    ->formatStateUsing(fn ($record) => $record->user ? $record->user->name : 'Système')
+                    ->formatStateUsing(function ($record) {
+                        if ($record->user_type === 'admin' && $record->user_id) {
+                            $user = \App\Models\User::find($record->user_id);
+                            return $user ? $user->name : 'Utilisateur #' . $record->user_id;
+                        } elseif ($record->user_type === 'member' && $record->user_id) {
+                            $member = \App\Models\Member::find($record->user_id);
+                            return $member ? $member->first_name . ' ' . $member->last_name : 'Membre #' . $record->user_id;
+                        }
+                        return 'Système';
+                    })
                     ->searchable()
                     ->sortable(),
                 

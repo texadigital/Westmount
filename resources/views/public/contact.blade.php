@@ -7,9 +7,9 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-primary to-blue-600 text-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ $pageContent->title ?? 'Contactez-nous' }}</h1>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Contactez-nous</h1>
             <p class="text-xl md:text-2xl max-w-3xl mx-auto">
-                {{ $pageContent->content ? strip_tags($pageContent->content) : 'Nous sommes là pour répondre à vos questions et vous accompagner dans votre démarche' }}
+                Nous sommes là pour répondre à vos questions et vous accompagner dans votre démarche
             </p>
         </div>
     </section>
@@ -141,8 +141,8 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Téléphone</h3>
                                 <p class="text-gray-600">
-                                    <a href="tel:{{ $pageContent->content ? strip_tags($pageContent->content) : '+1 (514) 555-0123' }}" class="hover:text-primary">{{ $pageContent->content ? strip_tags($pageContent->content) : '(514) 123-4567' }}</a><br>
-                                    <span class="text-sm text-gray-500">{{ $pageContent->content ? strip_tags($pageContent->content) : 'Lun - Ven: 9h00 - 17h00' }}</span>
+                                    <a href="tel:+1 (514) 555-0123" class="hover:text-primary">(514) 123-4567</a><br>
+                                    <span class="text-sm text-gray-500">Lun - Ven: 9h00 - 17h00</span>
                                 </p>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Email</h3>
                                 <p class="text-gray-600">
-                                    <a href="mailto:{{ $pageContent->content ? strip_tags($pageContent->content) : 'contact@associationwestmount.com' }}" class="hover:text-primary">{{ $pageContent->content ? strip_tags($pageContent->content) : 'info@associationwestmount.com' }}</a><br>
+                                    <a href="mailto:contact@associationwestmount.com" class="hover:text-primary">info@associationwestmount.com</a><br>
                                     <span class="text-sm text-gray-500">Réponse sous 24h</span>
                                 </p>
                             </div>

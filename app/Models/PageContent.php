@@ -39,3 +39,4 @@ class PageContent extends Model
             ->get();
     }
 }
+
