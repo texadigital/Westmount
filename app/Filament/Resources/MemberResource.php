@@ -193,6 +193,12 @@ class MemberResource extends Resource
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Statut')
                     ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger')
+                    ->trueLabel('Actif')
+                    ->falseLabel('Caduc')
                     ->sortable(),
                 
                 Tables\Columns\TextColumn::make('created_at')
@@ -217,11 +223,74 @@ class MemberResource extends Resource
                     ->falseLabel('Inactifs uniquement'),
             ])
             ->actions([
+                Tables\Actions\Action::make('generate_reactivation_code')
+                    ->label('Générer Code de Réactivation')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->action(function (Member $record) {
+                        $code = $record->generateReactivationCode();
+                        \Filament\Notifications\Notification::make()
+                            ->title('Code de réactivation généré')
+                            ->body("Code: {$code}")
+                            ->success()
+                            ->send();
+                    })
+                    ->visible(fn (Member $record) => !$record->is_active),
+                
+                Tables\Actions\Action::make('reactivate')
+                    ->label('Réactiver')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(fn (Member $record) => $record->reactivate())
+                    ->visible(fn (Member $record) => !$record->is_active),
+                
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('generate_reactivation_codes')
+                        ->label('Générer Codes de Réactivation')
+                        ->icon('heroicon-o-arrow-path')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            $codes = [];
+                            foreach ($records as $record) {
+                                if (!$record->is_active) {
+                                    $code = $record->generateReactivationCode();
+                                    $codes[] = "{$record->full_name}: {$code}";
+                                }
+                            }
+                            \Filament\Notifications\Notification::make()
+                                ->title('Codes de réactivation générés')
+                                ->body(implode("\n", $codes))
+                                ->success()
+                                ->send();
+                        }),
+                    
+                    Tables\Actions\BulkAction::make('reactivate_members')
+                        ->label('Réactiver les Membres')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            $count = 0;
+                            foreach ($records as $record) {
+                                if (!$record->is_active) {
+                                    $record->reactivate();
+                                    $count++;
+                                }
+                            }
+                            \Filament\Notifications\Notification::make()
+                                ->title('Membres réactivés')
+                                ->body("{$count} membre(s) réactivé(s)")
+                                ->success()
+                                ->send();
+                        }),
+                    
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])

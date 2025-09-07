@@ -77,25 +77,47 @@
                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50">
                     </div>
 
+                    <!-- Méthode de paiement -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Méthode de paiement</label>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <input type="radio" 
+                                       id="bank_transfer" 
+                                       name="payment_method" 
+                                       value="bank_transfer" 
+                                       checked
+                                       class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="bank_transfer" class="ml-3 block text-sm font-medium text-gray-700">
+                                    Virement bancaire
+                                </label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" 
+                                       id="interac" 
+                                       name="payment_method" 
+                                       value="interac" 
+                                       class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="interac" class="ml-3 block text-sm font-medium text-gray-700">
+                                    Interac e-Transfer
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Section Virement bancaire -->
                     <div class="mb-6">
                         <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
                             <h4 class="text-sm font-medium text-blue-800 mb-2">Informations pour virement bancaire</h4>
                             <div class="text-sm text-blue-700 space-y-1">
-                                <p><strong>Banque:</strong> {{ \App\Models\Setting::get('bank_name', 'Association Westmount') }}</p>
-                                <p><strong>Compte:</strong> {{ \App\Models\Setting::get('bank_account', '1234567890') }}</p>
-                                <p><strong>Transit:</strong> {{ \App\Models\Setting::get('bank_transit', '00123') }}</p>
-                                @if(\App\Models\Setting::get('bank_swift'))
-                                <p><strong>SWIFT:</strong> {{ \App\Models\Setting::get('bank_swift') }}</p>
-                                @endif
-                                @if(\App\Models\Setting::get('bank_address'))
-                                <p><strong>Adresse:</strong> {{ \App\Models\Setting::get('bank_address') }}</p>
-                                @endif
-                                <p><strong>Montant:</strong> {{ number_format($member->memberType->adhesion_fee, 2) }} {{ \App\Models\Setting::get('payment_currency', 'CAD') }}</p>
+                                <p><strong>Banque:</strong> Association Westmount</p>
+                                <p><strong>Compte:</strong> 1234567890</p>
+                                <p><strong>Transit:</strong> 00123</p>
+                                <p><strong>Montant:</strong> {{ number_format($member->memberType->adhesion_fee, 2) }} CAD</p>
                                 <p><strong>Référence:</strong> {{ $member->member_number }}-ADH</p>
                             </div>
                             <p class="text-xs text-blue-600 mt-2">
-                                {{ \App\Models\Setting::get('bank_instructions', 'Veuillez inclure votre numéro de membre dans la référence du virement.') }}
+                                Veuillez inclure votre numéro de membre dans la référence du virement.
                             </p>
                         </div>
                     </div>
@@ -142,19 +164,33 @@ document.addEventListener('DOMContentLoaded', function() {
         spinner.classList.remove('hidden');
         
         try {
+            const formData = new FormData(form);
+            
             const response = await fetch('{{ route("member.payment.adhesion.process") }}', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({
-                    amount: {{ $member->memberType->adhesion_fee }},
-                    description: 'Paiement d\'adhésion - {{ $member->memberType->name }}'
-                })
+                body: formData
             });
             
-            const result = await response.json();
+            // Check if response is HTML (redirect to login)
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('text/html')) {
+                // User is not authenticated, redirect to login
+                window.location.href = '{{ route("member.login") }}';
+                return;
+            }
+            
+            // Try to parse as JSON
+            let result;
+            try {
+                result = await response.json();
+            } catch (jsonError) {
+                console.error('JSON Parse Error:', jsonError);
+                console.error('Response text:', await response.text());
+                throw new Error('Réponse invalide du serveur. Veuillez vous reconnecter.');
+            }
             
             if (result.success) {
                 // Paiement créé avec succès, rediriger vers la page de confirmation

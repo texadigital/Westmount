@@ -35,4 +35,29 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook' => [
+            'secret' => env('STRIPE_WEBHOOK_SECRET'),
+        ],
+    ],
+
+    'bank' => [
+        'name' => env('BANK_NAME', 'Banque Nationale du Canada'),
+        'account_holder' => env('BANK_ACCOUNT_HOLDER', 'Association Westmount'),
+        'account_number' => env('BANK_ACCOUNT_NUMBER'),
+        'transit_number' => env('BANK_TRANSIT_NUMBER'),
+        'institution_number' => env('BANK_INSTITUTION_NUMBER'),
+        'swift_code' => env('BANK_SWIFT_CODE'),
+        'routing_number' => env('BANK_ROUTING_NUMBER'),
+    ],
+
+    'interac' => [
+        'email' => env('INTERAC_EMAIL', 'paiements@associationwestmount.com'),
+        'name' => env('INTERAC_NAME', 'Association Westmount'),
+        'security_question' => env('INTERAC_SECURITY_QUESTION', 'Quel est le nom de l\'association?'),
+        'security_answer' => env('INTERAC_SECURITY_ANSWER', 'Westmount'),
+    ],
+
 ];

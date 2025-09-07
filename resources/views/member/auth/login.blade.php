@@ -79,6 +79,13 @@
                     </button>
                 </div>
 
+                <!-- Lien de récupération -->
+                <div class="text-center">
+                    <a href="{{ route('public.account-recovery.form') }}" class="text-sm text-blue-600 hover:text-blue-500">
+                        Code PIN oublié ?
+                    </a>
+                </div>
+
                 <!-- Bouton d'inscription -->
                 <div class="text-center">
                     <p class="text-sm text-gray-600 mb-4">

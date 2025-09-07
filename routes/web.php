@@ -39,6 +39,32 @@ Route::prefix('register')->name('public.registration.')->group(function () {
     Route::post('/check-code', [App\Http\Controllers\Public\RegistrationController::class, 'checkSponsorshipCode'])->name('check-code');
 });
 
+// Routes de réactivation
+Route::prefix('reactivate')->name('public.reactivation.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Public\ReactivationController::class, 'showReactivationForm'])->name('form');
+    Route::post('/', [App\Http\Controllers\Public\ReactivationController::class, 'reactivate'])->name('reactivate');
+    Route::get('/success', [App\Http\Controllers\Public\ReactivationController::class, 'success'])->name('success');
+    Route::post('/check-code', [App\Http\Controllers\Public\ReactivationController::class, 'checkLapsedCode'])->name('check-code');
+});
+
+// Routes d'inscription d'organisation
+Route::prefix('organization-register')->name('public.organization-registration.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Public\OrganizationRegistrationController::class, 'showRegistrationForm'])->name('form');
+    Route::post('/', [App\Http\Controllers\Public\OrganizationRegistrationController::class, 'register'])->name('register');
+    Route::get('/success', [App\Http\Controllers\Public\OrganizationRegistrationController::class, 'success'])->name('success');
+    Route::post('/check-code', [App\Http\Controllers\Public\OrganizationRegistrationController::class, 'checkSponsorshipCode'])->name('check-code');
+});
+
+// Routes de récupération de compte
+Route::prefix('account-recovery')->name('public.account-recovery.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Public\AccountRecoveryController::class, 'showRecoveryForm'])->name('form');
+    Route::post('/request', [App\Http\Controllers\Public\AccountRecoveryController::class, 'requestRecovery'])->name('request');
+    Route::get('/sent', [App\Http\Controllers\Public\AccountRecoveryController::class, 'sent'])->name('sent');
+    Route::get('/reset/{token}', [App\Http\Controllers\Public\AccountRecoveryController::class, 'showResetForm'])->name('reset');
+    Route::post('/reset/{token}', [App\Http\Controllers\Public\AccountRecoveryController::class, 'resetPin'])->name('reset-pin');
+    Route::get('/success', [App\Http\Controllers\Public\AccountRecoveryController::class, 'success'])->name('success');
+});
+
 // Routes pour l'espace membre
 Route::prefix('member')->name('member.')->group(function () {
     // Routes publiques (sans authentification)
@@ -70,6 +96,13 @@ Route::prefix('member')->name('member.')->group(function () {
         Route::post('sponsorship/{sponsorship}/complete', [App\Http\Controllers\Member\SponsorshipController::class, 'complete'])->name('sponsorship.complete');
         Route::delete('sponsorship/{sponsorship}', [App\Http\Controllers\Member\SponsorshipController::class, 'destroy'])->name('sponsorship.destroy');
         Route::post('sponsorship/check-code', [App\Http\Controllers\Member\SponsorshipController::class, 'checkCode'])->name('sponsorship.check-code');
+        
+        // Routes de documents
+        Route::get('documents', [App\Http\Controllers\Member\DocumentController::class, 'index'])->name('documents.index');
+        Route::get('documents/create', [App\Http\Controllers\Member\DocumentController::class, 'create'])->name('documents.create');
+        Route::post('documents', [App\Http\Controllers\Member\DocumentController::class, 'store'])->name('documents.store');
+        Route::get('documents/{document}/download', [App\Http\Controllers\Member\DocumentController::class, 'download'])->name('documents.download');
+        Route::delete('documents/{document}', [App\Http\Controllers\Member\DocumentController::class, 'destroy'])->name('documents.destroy');
     });
 });
 
@@ -77,3 +110,5 @@ Route::prefix('member')->name('member.')->group(function () {
 
 // Webhook Stripe (route publique)
 Route::post('webhook/stripe', [App\Http\Controllers\Member\PaymentProcessingController::class, 'webhook'])->name('webhook.stripe');
+
+

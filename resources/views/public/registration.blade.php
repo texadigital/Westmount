@@ -154,13 +154,75 @@
 
                     <!-- Code de parrainage -->
                     <div class="mb-8">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Code de parrainage (optionnel)</h3>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Code de parrainage</h3>
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-blue-800">
+                                        Inscription sur invitation uniquement
+                                    </h3>
+                                    <div class="mt-2 text-sm text-blue-700">
+                                        <p>Pour rejoindre l'Association Westmount, vous devez être parrainé par un membre existant. Demandez à votre parrain de vous fournir un code de parrainage.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div>
-                            <label for="sponsorship_code" class="block text-sm font-medium text-gray-700">Code de parrainage</label>
+                            <label for="sponsorship_code" class="block text-sm font-medium text-gray-700">Code de parrainage *</label>
                             <input type="text" name="sponsorship_code" id="sponsorship_code" 
                                    value="{{ old('sponsorship_code') }}"
-                                   placeholder="Entrez le code de parrainage"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                   placeholder="Entrez le code de parrainage fourni par votre parrain"
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('sponsorship_code') border-red-300 @enderror"
+                                   required>
+                            @error('sponsorship_code')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Ce code vous a été fourni par un membre de l'association</p>
+                        </div>
+                    </div>
+
+                    <!-- Méthode de paiement -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Méthode de paiement</h3>
+                        <div>
+                            <label for="payment_method" class="block text-sm font-medium text-gray-700">Choisissez votre méthode de paiement *</label>
+                            <div class="mt-2 space-y-3">
+                                <div class="flex items-center">
+                                    <input id="payment_interac" name="payment_method" type="radio" value="interac" 
+                                           {{ old('payment_method') == 'interac' ? 'checked' : '' }}
+                                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                    <label for="payment_interac" class="ml-3 block text-sm font-medium text-gray-700">
+                                        <span class="flex items-center">
+                                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                            </svg>
+                                            Interac e-Transfer
+                                        </span>
+                                        <span class="text-xs text-gray-500">Paiement instantané par email</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input id="payment_bank" name="payment_method" type="radio" value="bank_transfer" 
+                                           {{ old('payment_method') == 'bank_transfer' ? 'checked' : '' }}
+                                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                    <label for="payment_bank" class="ml-3 block text-sm font-medium text-gray-700">
+                                        <span class="flex items-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                                            </svg>
+                                            Virement bancaire
+                                        </span>
+                                        <span class="text-xs text-gray-500">Instructions de paiement par email</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

@@ -32,6 +32,9 @@ class Member extends Model
         'member_type_id',
         'organization_id',
         'sponsor_id',
+        'lapsed_code',
+        'reactivated_at',
+        'reactivation_code',
         'is_active',
         'email_verified_at',
         'phone_verified_at',
@@ -45,6 +48,7 @@ class Member extends Model
         'birth_date' => 'date',
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
+        'reactivated_at' => 'datetime',
         'is_active' => 'boolean',
     ];
 
@@ -190,5 +194,52 @@ class Member extends Model
         return $query->whereHas('memberships', function ($q) {
             $q->where('status', 'lapsed');
         });
+    }
+
+    /**
+     * Relation avec les codes de réactivation
+     */
+    public function lapsedCodes(): HasMany
+    {
+        return $this->hasMany(LapsedMemberCode::class);
+    }
+
+    /**
+     * Relation avec les documents du membre
+     */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(MemberDocument::class);
+    }
+
+    /**
+     * Vérifier si le membre est caduc
+     */
+    public function isLapsed(): bool
+    {
+        return $this->activeMembership && $this->activeMembership->status === 'lapsed';
+    }
+
+    /**
+     * Générer un code de réactivation
+     */
+    public function generateReactivationCode(): string
+    {
+        $code = LapsedMemberCode::createForMember($this);
+        $this->update(['reactivation_code' => $code->code]);
+        return $code->code;
+    }
+
+    /**
+     * Réactiver le membre
+     */
+    public function reactivate(): void
+    {
+        $this->update([
+            'is_active' => true,
+            'reactivated_at' => now(),
+            'lapsed_code' => null,
+            'reactivation_code' => null,
+        ]);
     }
 }

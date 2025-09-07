@@ -1,0 +1,27 @@
+[33mcommit 0b594a8ea497fc18eb4e4d4a5ca7d1f8a758abf6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: texadigital <ayukndiparreyntoh@gmail.com>
+Date:   Sat Sep 6 16:32:39 2025 +0100
+
+    Clean up temporary PHP and SQL files from codebase
+
+add_page_content.sql
+check_table_structure.php
+complete_database_export.sql
+complete_database_export_fixed.sql
+create_missing_tables.sql
+direct_database_update.php
+fix_all_controllers.php
+fix_all_pages.php
+fix_all_templates.php
+fix_database_connection.php
+fix_laravel_config.php
+fix_laravel_db.php
+hosting_diagnostic.php
+reset_database.php
+simple_test.php
+test_connection.php
+test_home_page.php
+test_page_content.php
+update_database.php
+westmount_update_database.sql
+westmount_updated_database.sql

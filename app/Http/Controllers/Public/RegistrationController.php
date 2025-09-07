@@ -44,7 +44,8 @@ class RegistrationController extends Controller
             'canadian_status_proof' => 'required|string|max:255',
             'member_type_id' => 'required|exists:member_types,id',
             'sponsorship_code' => 'nullable|string|exists:sponsorships,sponsorship_code',
-            'pin_code' => 'required|string|min:4|max:6',
+            'payment_method' => 'required|in:interac,bank_transfer',
+            'pin_code' => 'required|string|min:4|max:6|unique:members,pin_code',
             'pin_code_confirmation' => 'required|same:pin_code',
             'organization_id' => 'nullable|exists:organizations,id',
         ], [
@@ -65,15 +66,29 @@ class RegistrationController extends Controller
             'member_type_id.required' => 'Le type de membre est requis.',
             'member_type_id.exists' => 'Le type de membre sélectionné n\'existe pas.',
             'sponsorship_code.exists' => 'Le code de parrainage n\'est pas valide.',
+            'payment_method.required' => 'La méthode de paiement est requise.',
+            'payment_method.in' => 'Méthode de paiement invalide.',
             'pin_code.required' => 'Le code PIN est requis.',
             'pin_code.min' => 'Le code PIN doit contenir au moins 4 caractères.',
             'pin_code.max' => 'Le code PIN ne peut pas dépasser 6 caractères.',
+            'pin_code.unique' => 'Ce code PIN est déjà utilisé par un autre membre.',
             'pin_code_confirmation.same' => 'La confirmation du code PIN ne correspond pas.',
         ]);
 
         // Vérifier l'âge par rapport au type de membre
         $memberType = MemberType::find($request->member_type_id);
-        $age = Carbon::parse($request->birth_date)->age;
+        
+        // Convert date format if needed (handle both DD/MM/YYYY and YYYY-MM-DD)
+        $birthDate = $request->birth_date;
+        if (strpos($birthDate, '/') !== false) {
+            // Convert DD/MM/YYYY to YYYY-MM-DD
+            $dateParts = explode('/', $birthDate);
+            if (count($dateParts) === 3) {
+                $birthDate = $dateParts[2] . '-' . str_pad($dateParts[1], 2, '0', STR_PAD_LEFT) . '-' . str_pad($dateParts[0], 2, '0', STR_PAD_LEFT);
+            }
+        }
+        
+        $age = Carbon::parse($birthDate)->age;
         
         if (!$memberType->isValidAge($age)) {
             return back()->withErrors([
@@ -109,7 +124,7 @@ class RegistrationController extends Controller
                 'pin_code' => $request->pin_code,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
-                'birth_date' => $request->birth_date,
+                'birth_date' => $birthDate,
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'address' => $request->address,
@@ -142,7 +157,7 @@ class RegistrationController extends Controller
                 'amount' => $memberType->adhesion_fee,
                 'currency' => 'CAD',
                 'status' => 'pending',
-                'payment_method' => 'pending',
+                'payment_method' => $request->payment_method,
                 'description' => 'Paiement d\'adhésion initial',
             ]);
 

@@ -211,10 +211,105 @@
                     </ul>
                     <a href="{{ route('public.registration.form') }}" 
                        class="w-full bg-primary text-white hover:bg-blue-700 font-bold py-2 px-4 rounded-lg text-center block transition duration-300">
-                        Choisir ce plan
+                        S'inscrire avec un parrain
                     </a>
                 </div>
                 @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Lapsed Members Section -->
+    <section class="py-20 bg-yellow-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Membre Caduc ?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Réactivez votre adhésion facilement avec votre code de réactivation
+                </p>
+            </div>
+            
+            <div class="max-w-md mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="text-center">
+                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
+                            <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Réactivation d'adhésion</h3>
+                        <p class="text-gray-600 mb-6">
+                            Utilisez le code de réactivation qui vous a été envoyé pour réactiver votre adhésion.
+                        </p>
+                        <a href="{{ route('public.reactivation.form') }}" 
+                           class="w-full bg-yellow-600 text-white hover:bg-yellow-700 font-bold py-2 px-4 rounded-lg text-center block transition duration-300">
+                            Réactiver mon adhésion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organization Registration Section -->
+    <section class="py-20 bg-green-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Organisation ou Association ?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Inscrivez votre organisation et bénéficiez de tarifs préférentiels pour vos membres
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Avantages pour les Organisations</h3>
+                            <ul class="space-y-3 text-gray-600">
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-green-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Frais d'adhésion : 50$ × nombre de membres
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-green-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Gestion centralisée des membres
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-green-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Rapports détaillés pour l'organisation
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-green-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Support dédié aux organisations
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="text-center">
+                            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+                                <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Inscription d'Organisation</h3>
+                            <p class="text-gray-600 mb-6">
+                                Inscrivez votre organisation et ajoutez tous vos membres en une seule fois.
+                            </p>
+                            <a href="{{ route('public.organization-registration.form') }}" 
+                               class="w-full bg-green-600 text-white hover:bg-green-700 font-bold py-3 px-6 rounded-lg text-center block transition duration-300">
+                                Inscrire mon Organisation
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

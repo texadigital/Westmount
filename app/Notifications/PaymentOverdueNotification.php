@@ -52,3 +52,5 @@ class PaymentOverdueNotification extends Notification implements ShouldQueue
             ->line('Pour toute question, n\'hésitez pas à nous contacter.')
             ->salutation('Cordialement, L\'équipe Association Westmount');
     }
+
+}  

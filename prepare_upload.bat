@@ -52,3 +52,4 @@ echo 4. Run database migrations
 echo.
 pause
 
+

@@ -66,12 +66,19 @@ class Organization extends Model
 
     /**
      * Calculer le total des frais d'adhésion pour les associations
-     * Pour les associations: 50$ × nombre de membres
+     * Utilise les paramètres de calcul dynamiques
      */
     public function calculateAdhesionFees(): float
     {
         $memberCount = $this->calculateMemberCount();
-        return $memberCount * 50.00; // 50$ par membre
+        $setting = \App\Models\OrganizationCalculationSetting::getActive();
+        
+        if ($setting) {
+            return $setting->calculateAdhesionFees($memberCount);
+        }
+        
+        // Fallback to hardcoded calculation
+        return $memberCount * 50.00;
     }
 
     /**

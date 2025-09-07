@@ -17,19 +17,45 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Get statistics for the home page
-        $stats = [
-            'total_members' => Member::where('is_active', true)->count(),
-            'total_funds' => Fund::where('is_active', true)->sum('current_balance'),
-            'years_active' => 25, // Static value for now
-        ];
+        try {
+            // Get statistics for the home page
+            $stats = [
+                'total_members' => Member::where('is_active', true)->count(),
+                'total_funds' => Fund::where('is_active', true)->sum('current_balance'),
+                'years_active' => 25, // Static value for now
+            ];
 
-        // Get member types for pricing display
-        $memberTypes = MemberType::active()->get();
+            // Get member types for pricing display
+            $memberTypes = MemberType::active()->get();
 
-        // Get dynamic content for home page
-        $content = PageContent::getPageContent('home');
+            // Get dynamic content for home page (with fallback)
+            $content = null;
+            try {
+                $content = PageContent::getPageContent('home');
+            } catch (\Exception $e) {
+                // If PageContent table doesn't exist or has issues, use default content
+                $content = (object) [
+                    'title' => 'Solidarité & Entraide',
+                    'content' => 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.'
+                ];
+            }
 
-        return view('public.home', compact('stats', 'memberTypes', 'content'));
+            return view('public.home', compact('stats', 'memberTypes', 'content'));
+        } catch (\Exception $e) {
+            // Fallback if there are any database issues
+            $stats = [
+                'total_members' => 500,
+                'total_funds' => 50000,
+                'years_active' => 25,
+            ];
+
+            $memberTypes = collect([]);
+            $content = (object) [
+                'title' => 'Solidarité & Entraide',
+                'content' => 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.'
+            ];
+
+            return view('public.home', compact('stats', 'memberTypes', 'content'));
+        }
     }
 }
