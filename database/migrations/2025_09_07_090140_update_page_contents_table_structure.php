@@ -11,15 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Check if the columns exist before trying to drop them
+        if (Schema::hasColumn('page_contents', 'section')) {
+            Schema::table('page_contents', function (Blueprint $table) {
+                $table->dropColumn(['section', 'key', 'value', 'type', 'sort_order']);
+            });
+        }
+        
+        // Add new columns
         Schema::table('page_contents', function (Blueprint $table) {
-            // Drop the old columns
-            $table->dropColumn(['section', 'key', 'value', 'type', 'sort_order']);
-            
-            // Add the new columns that match the model
-            $table->string('title')->after('page');
-            $table->longText('content')->after('title');
-            $table->string('meta_title')->nullable()->after('content');
-            $table->text('meta_description')->nullable()->after('meta_title');
+            $table->string('title')->nullable();
+            $table->longText('content')->nullable();
+            $table->string('content_type')->default('text');
+            $table->boolean('is_published')->default(true);
+            $table->integer('order')->default(0);
         });
     }
 
@@ -29,15 +34,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('page_contents', function (Blueprint $table) {
-            // Drop the new columns
-            $table->dropColumn(['title', 'content', 'meta_title', 'meta_description']);
-            
-            // Add back the old columns
-            $table->string('section')->index()->after('page');
-            $table->string('key')->index()->after('section');
-            $table->longText('value')->after('key');
-            $table->string('type')->default('text')->after('value');
-            $table->integer('sort_order')->default(0)->after('is_active');
+            $table->dropColumn(['title', 'content', 'content_type', 'is_published', 'order']);
+        });
+        
+        Schema::table('page_contents', function (Blueprint $table) {
+            $table->string('section')->index();
+            $table->string('key')->index();
+            $table->longText('value');
+            $table->string('type')->default('text');
+            $table->integer('sort_order')->default(0);
         });
     }
 };

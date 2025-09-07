@@ -197,8 +197,6 @@ class MemberResource extends Resource
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('danger')
-                    ->trueLabel('Actif')
-                    ->falseLabel('Caduc')
                     ->sortable(),
                 
                 Tables\Columns\TextColumn::make('created_at')

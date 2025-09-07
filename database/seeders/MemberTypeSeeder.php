@@ -53,7 +53,10 @@ class MemberTypeSeeder extends Seeder
         ];
 
         foreach ($memberTypes as $memberType) {
-            MemberType::create($memberType);
+            MemberType::updateOrCreate(
+                ['name' => $memberType['name']], // Find by name
+                $memberType // Update or create with all data
+            );
         }
     }
 }

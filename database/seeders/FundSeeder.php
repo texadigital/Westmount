@@ -44,7 +44,10 @@ class FundSeeder extends Seeder
         ];
 
         foreach ($funds as $fund) {
-            Fund::create($fund);
+            Fund::updateOrCreate(
+                ['type' => $fund['type']], // Find by type
+                $fund // Update or create with all data
+            );
         }
     }
 }

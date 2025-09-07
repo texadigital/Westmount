@@ -87,16 +87,17 @@ class Organization extends Model
      */
     public function calculateContributionFees(): float
     {
-        $members = $this->members()
-            ->active()
-            ->with('memberType')
-            ->get();
-
+        // Use a more memory-efficient approach with chunking
         $totalContribution = 0;
 
-        foreach ($members as $member) {
-            $totalContribution += $member->memberType->death_contribution;
-        }
+        $this->members()
+            ->active()
+            ->with('memberType')
+            ->chunk(100, function ($members) use (&$totalContribution) {
+                foreach ($members as $member) {
+                    $totalContribution += $member->memberType->death_contribution;
+                }
+            });
 
         return $totalContribution;
     }

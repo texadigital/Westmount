@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             FundSeeder::class,
             PageContentSeeder::class,
             TestDataSeeder::class,
+            MemberRegistrationCodeSeeder::class,
         ]);
     }
 }
