@@ -48,6 +48,7 @@ class DashboardController extends Controller
         $overdueAmount = 0;
         $pendingPayments = 0;
         $completedPayments = 0;
+        $pendingAmount = 0;
         
         if ($activeMembership) {
             // Montant total dû (adhésion + contribution de décès)
@@ -56,8 +57,13 @@ class DashboardController extends Controller
             // Montant déjà payé (paiements confirmés uniquement)
             $totalPaid = $activeMembership->adhesion_fee_paid + $activeMembership->total_contributions_paid;
             
-            // Montant dû = Total dû - Total payé
-            $overdueAmount = max(0, $totalOwed - $totalPaid);
+            // Montant des paiements en attente
+            $pendingAmount = $member->payments()
+                ->where('status', 'pending')
+                ->sum('amount');
+            
+            // Montant dû = Total dû - Total payé - Montant en attente
+            $overdueAmount = max(0, $totalOwed - $totalPaid - $pendingAmount);
             
             // Compter les paiements
             $pendingPayments = $member->payments()->where('status', 'pending')->count();
@@ -72,6 +78,7 @@ class DashboardController extends Controller
             'overdue_amount' => $overdueAmount,
             'pending_payments' => $pendingPayments,
             'completed_payments' => $completedPayments,
+            'pending_amount' => $pendingAmount,
         ];
 
         return view('member.dashboard', compact(

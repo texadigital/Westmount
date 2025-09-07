@@ -146,11 +146,54 @@
                 </div>
                 <div>
                     <dt class="text-sm font-medium text-gray-500">Montant dû</dt>
-                    <dd class="mt-1 text-sm font-medium {{ $activeMembership->amount_due > 0 ? 'text-red-600' : 'text-green-600' }}">
-                        {{ number_format($activeMembership->amount_due, 2) }} CAD
+                    <dd class="mt-1 text-sm font-medium {{ $stats['overdue_amount'] > 0 ? 'text-red-600' : 'text-green-600' }}">
+                        {{ number_format($stats['overdue_amount'], 2) }} CAD
                     </dd>
                 </div>
             </div>
+            
+            <!-- Résumé financier détaillé -->
+            <div class="mt-6 border-t border-gray-200 pt-6">
+                <h4 class="text-sm font-medium text-gray-900 mb-4">Résumé financier</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Frais d'adhésion payés</span>
+                            <span class="text-sm font-medium text-green-600">
+                                {{ number_format($activeMembership->adhesion_fee_paid ?? 0, 2) }} CAD
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Contributions payées</span>
+                            <span class="text-sm font-medium text-green-600">
+                                {{ number_format($activeMembership->total_contributions_paid ?? 0, 2) }} CAD
+                            </span>
+                        </div>
+                        @if($stats['pending_amount'] > 0)
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Paiements en attente</span>
+                            <span class="text-sm font-medium text-blue-600">
+                                {{ number_format($stats['pending_amount'], 2) }} CAD
+                            </span>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Montant dû</span>
+                            <span class="text-sm font-medium {{ $stats['overdue_amount'] > 0 ? 'text-red-600' : 'text-green-600' }}">
+                                {{ number_format($stats['overdue_amount'], 2) }} CAD
+                            </span>
+                        </div>
+                        @if($stats['pending_payments'] > 0)
+                        <div class="text-xs text-blue-600">
+                            {{ $stats['pending_payments'] }} paiement(s) en cours de traitement
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            
             @if($stats['overdue_amount'] > 0)
             <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                 <div class="flex">
@@ -162,9 +205,17 @@
                     <div class="ml-3 flex-1">
                         <h3 class="text-sm font-medium text-yellow-800">Paiement en attente</h3>
                         <div class="mt-2 text-sm text-yellow-700">
-                            <p>Vous avez un montant de {{ number_format($stats['overdue_amount'], 2) }} CAD à régler.</p>
+                            @if($stats['overdue_amount'] > 0)
+                                <p>Vous avez un montant de {{ number_format($stats['overdue_amount'], 2) }} CAD à régler.</p>
+                            @else
+                                <p class="text-green-600">✅ Aucun montant dû - tous les paiements sont à jour!</p>
+                            @endif
+                            
                             @if($stats['pending_payments'] > 0)
-                                <p class="mt-1">Vous avez {{ $stats['pending_payments'] }} paiement(s) en cours de traitement.</p>
+                                <p class="mt-1 text-blue-600">
+                                    <strong>{{ $stats['pending_payments'] }} paiement(s) en cours de traitement</strong> 
+                                    ({{ number_format($stats['pending_amount'], 2) }} CAD)
+                                </p>
                             @endif
                         </div>
                         <div class="mt-3">
