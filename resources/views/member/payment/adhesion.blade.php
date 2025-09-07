@@ -169,15 +169,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch('{{ route("member.payment.adhesion.process") }}', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: formData
+                body: formData,
+                credentials: 'same-origin' // Important: include cookies for session
             });
             
             // Check if response is HTML (redirect to login)
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('text/html')) {
                 // User is not authenticated, redirect to login
+                console.log('Redirected to login - session lost');
+                window.location.href = '{{ route("member.login") }}';
+                return;
+            }
+            
+            // Check if we got a redirect response
+            if (response.redirected || response.url.includes('login')) {
+                console.log('Redirected to login - session lost');
                 window.location.href = '{{ route("member.login") }}';
                 return;
             }
@@ -188,7 +199,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 result = await response.json();
             } catch (jsonError) {
                 console.error('JSON Parse Error:', jsonError);
-                console.error('Response text:', await response.text());
+                const responseText = await response.text();
+                console.error('Response text:', responseText);
+                
+                // If response contains login form, redirect to login
+                if (responseText.includes('Connexion Membre') || responseText.includes('member/login')) {
+                    window.location.href = '{{ route("member.login") }}';
+                    return;
+                }
+                
                 throw new Error('Réponse invalide du serveur. Veuillez vous reconnecter.');
             }
             

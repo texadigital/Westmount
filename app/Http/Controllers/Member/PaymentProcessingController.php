@@ -120,11 +120,34 @@ class PaymentProcessingController extends Controller
      */
     public function processAdhesionPayment(Request $request)
     {
+        // Debug logging
+        Log::info('Payment processing started', [
+            'session_id' => $request->session()->getId(),
+            'member_id_in_session' => $request->session()->get('member_id'),
+            'has_member_in_request' => $request->attributes->has('current_member'),
+            'expects_json' => $request->expectsJson(),
+            'ajax' => $request->ajax(),
+            'headers' => $request->headers->all()
+        ]);
+
         $request->validate([
             'payment_method' => 'required|in:interac,bank_transfer',
         ]);
 
         $member = $request->attributes->get('current_member');
+        
+        if (!$member) {
+            Log::error('No member found in request attributes', [
+                'session_id' => $request->session()->getId(),
+                'member_id_in_session' => $request->session()->get('member_id')
+            ]);
+            
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Session expirée. Veuillez vous reconnecter.'], 401);
+            }
+            return redirect()->route('member.login')->with('error', 'Session expirée. Veuillez vous reconnecter.');
+        }
+        
         $activeMembership = $member->activeMembership;
 
         if (!$activeMembership) {

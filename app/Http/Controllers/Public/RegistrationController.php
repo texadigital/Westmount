@@ -171,8 +171,12 @@ class RegistrationController extends Controller
             // Envoyer la notification de bienvenue
             $member->notify(new WelcomeMemberNotification($member));
 
-            return redirect()->route('public.registration.success')
-                ->with('success', 'Inscription réussie ! Votre numéro de membre est : ' . $member->member_number);
+            // Auto-login the member after registration
+            $request->session()->put('member_id', $member->id);
+            $request->session()->put('member_name', $member->full_name);
+
+            return redirect()->route('member.payment.adhesion')
+                ->with('success', 'Inscription réussie ! Votre numéro de membre est : ' . $member->member_number . '. Veuillez effectuer votre paiement d\'adhésion.');
 
         } catch (\Exception $e) {
             DB::rollBack();
