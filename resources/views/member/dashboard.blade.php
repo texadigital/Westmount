@@ -6,8 +6,28 @@
 <div class="px-4 sm:px-6 lg:px-8">
     <!-- En-tête -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Tableau de bord</h1>
-        <p class="mt-2 text-gray-600">Bienvenue {{ $member->first_name }}, voici un aperçu de votre situation.</p>
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Tableau de bord</h1>
+                <p class="mt-2 text-gray-600">Bienvenue {{ $member->first_name }}, voici un aperçu de votre situation.</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href="{{ route('sponsorship.create') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Créer un parrainage
+                </a>
+                <a href="{{ route('sponsorship.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Gérer parrainages
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Statistiques -->
@@ -131,7 +151,7 @@
                     </dd>
                 </div>
             </div>
-            @if($activeMembership->amount_due > 0)
+            @if($stats['overdue_amount'] > 0)
             <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                 <div class="flex">
                     <div class="flex-shrink-0">
@@ -139,10 +159,22 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                         </svg>
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-3 flex-1">
                         <h3 class="text-sm font-medium text-yellow-800">Paiement en attente</h3>
                         <div class="mt-2 text-sm text-yellow-700">
-                            <p>Vous avez un montant de {{ number_format($activeMembership->amount_due, 2) }} CAD à régler.</p>
+                            <p>Vous avez un montant de {{ number_format($stats['overdue_amount'], 2) }} CAD à régler.</p>
+                            @if($stats['pending_payments'] > 0)
+                                <p class="mt-1">Vous avez {{ $stats['pending_payments'] }} paiement(s) en cours de traitement.</p>
+                            @endif
+                        </div>
+                        <div class="mt-3">
+                            <a href="{{ route('member.payment.adhesion') }}" 
+                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                                Effectuer le paiement
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -204,7 +236,7 @@
 
     <!-- Contributions en attente -->
     @if($pendingContributions->count() > 0)
-    <div class="bg-white shadow rounded-lg">
+    <div class="bg-white shadow rounded-lg mb-8">
         <div class="px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-medium text-gray-900">Contributions en attente</h3>
         </div>
@@ -239,6 +271,90 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+    @endif
+
+    <!-- Membres parrainés -->
+    @if($sponsoredMembers->count() > 0)
+    <div class="bg-white shadow rounded-lg mb-8">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">Membres parrainés</h3>
+                    <a href="{{ route('sponsorship.index') }}" class="text-sm text-blue-600 hover:text-blue-500">
+                    Voir tout
+                </a>
+            </div>
+        </div>
+        <div class="overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inscrit le</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($sponsoredMembers as $sponsoredMember)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ $sponsoredMember->full_name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ $sponsoredMember->memberType->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ $sponsoredMember->created_at->format('d/m/Y') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                @if($sponsoredMember->is_active) bg-green-100 text-green-800
+                                @else bg-red-100 text-red-800 @endif">
+                                @if($sponsoredMember->is_active) Actif
+                                @else Inactif @endif
+                            </span>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
+    <!-- Parrainages actifs -->
+    @if($activeSponsorships->count() > 0)
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">Codes de parrainage actifs</h3>
+                    <a href="{{ route('sponsorship.index') }}" class="text-sm text-blue-600 hover:text-blue-500">
+                    Gérer
+                </a>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @foreach($activeSponsorships as $sponsorship)
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-900">{{ $sponsorship->prospect_first_name }} {{ $sponsorship->prospect_last_name }}</h4>
+                            <p class="text-sm text-gray-500">{{ $sponsorship->prospect_email }}</p>
+                        </div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            En attente
+                        </span>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-xs text-gray-500">Code: <span class="font-mono font-medium">{{ $sponsorship->sponsorship_code }}</span></p>
+                        <p class="text-xs text-gray-500">Expire: {{ $sponsorship->expires_at->format('d/m/Y') }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
     </div>
     @endif

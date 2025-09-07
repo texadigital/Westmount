@@ -31,12 +31,47 @@ class DashboardController extends Controller
             ->orderBy('due_date', 'asc')
             ->get();
         
+        // Récupérer les membres parrainés
+        $sponsoredMembers = $member->sponsoredMembers()
+            ->with('memberType')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
+        // Récupérer les parrainages actifs
+        $activeSponsorships = $member->sponsorships()
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Calculer le montant dû en tenant compte des paiements en attente
+        $overdueAmount = 0;
+        $pendingPayments = 0;
+        $completedPayments = 0;
+        
+        if ($activeMembership) {
+            // Montant total dû (adhésion + contribution de décès)
+            $totalOwed = $member->memberType->adhesion_fee + $member->memberType->death_contribution;
+            
+            // Montant déjà payé (paiements confirmés uniquement)
+            $totalPaid = $activeMembership->adhesion_fee_paid + $activeMembership->total_contributions_paid;
+            
+            // Montant dû = Total dû - Total payé
+            $overdueAmount = max(0, $totalOwed - $totalPaid);
+            
+            // Compter les paiements
+            $pendingPayments = $member->payments()->where('status', 'pending')->count();
+            $completedPayments = $member->payments()->where('status', 'completed')->count();
+        }
+
         // Statistiques
         $stats = [
             'total_payments' => $member->payments()->count(),
             'total_contributions' => $member->contributions()->count(),
             'pending_contributions' => $member->contributions()->where('status', 'pending')->count(),
-            'overdue_amount' => $activeMembership ? $activeMembership->amount_due : 0,
+            'overdue_amount' => $overdueAmount,
+            'pending_payments' => $pendingPayments,
+            'completed_payments' => $completedPayments,
         ];
 
         return view('member.dashboard', compact(
@@ -44,6 +79,8 @@ class DashboardController extends Controller
             'activeMembership',
             'recentPayments',
             'pendingContributions',
+            'sponsoredMembers',
+            'activeSponsorships',
             'stats'
         ));
     }
