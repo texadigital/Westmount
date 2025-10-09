@@ -15,6 +15,12 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                <p class="text-blue-800 text-sm">
+                    Pour l’adhésion d’une organisation: <strong>Coût unitaire</strong> x <strong>Nombre de membres</strong><br>
+                    Soit <strong>${{ number_format($adhesionUnitFee, 0) }} CAD</strong> x nombre de membres
+                </p>
+            </div>
             <form method="POST" action="{{ route('public.organization-registration.register') }}" id="organizationForm">
                 @csrf
                 
@@ -248,6 +254,10 @@
                 <!-- Membres de l'organisation -->
                 <div class="mb-8">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Membres de l'Organisation</h3>
+                    <div class="mb-4 text-sm text-gray-700">
+                        Membres ajoutés: <span id="member-count" class="font-semibold">0</span>
+                        · Estimation totale: <span id="estimated-total" class="font-semibold">$0 CAD</span>
+                    </div>
                     <div id="members-container">
                         <!-- Les membres seront ajoutés dynamiquement -->
                     </div>
@@ -279,6 +289,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const membersContainer = document.getElementById('members-container');
     const addMemberBtn = document.getElementById('add-member');
     const memberTypes = @json($memberTypes);
+    const adhesionUnitFee = {{ (int) $adhesionUnitFee }};
+    const memberCountEl = document.getElementById('member-count');
+    const estimatedTotalEl = document.getElementById('estimated-total');
+
+    function updateSummary() {
+        const forms = membersContainer.querySelectorAll('.member-form');
+        memberCount = forms.length;
+        memberCountEl.textContent = memberCount;
+        const total = adhesionUnitFee * memberCount;
+        estimatedTotalEl.textContent = `$${total.toLocaleString('en-CA')} CAD`;
+    }
 
     // Fonction pour créer un formulaire de membre
     function createMemberForm() {
@@ -392,7 +413,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ajouter l'événement de suppression
         memberDiv.querySelector('.remove-member').addEventListener('click', function() {
             memberDiv.remove();
+            updateSummary();
         });
+
+        updateSummary();
     }
 
     // Ajouter le premier membre

@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
             MemberTypeSeeder::class,
             FundSeeder::class,
             PageContentSeeder::class,
-            TestDataSeeder::class,
-            MemberRegistrationCodeSeeder::class,
+            TeamMemberSeeder::class,
+            FooterSettingsSeeder::class,
         ]);
     }
 }

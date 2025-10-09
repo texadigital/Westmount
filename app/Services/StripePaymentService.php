@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Payment;
 use App\Models\Member;
 use App\Models\Membership;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
@@ -15,8 +16,9 @@ class StripePaymentService
 {
     public function __construct()
     {
-        if (config('services.stripe.secret')) {
-            Stripe::setApiKey(config('services.stripe.secret'));
+        $secret = Setting::get('stripe_secret', config('services.stripe.secret'));
+        if ($secret) {
+            Stripe::setApiKey($secret);
         }
     }
 

@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\MemberType;
 use App\Models\Membership;
 use App\Models\Payment;
+use App\Models\Setting;
 use App\Models\Sponsorship;
 use App\Notifications\WelcomeMemberNotification;
 use App\Notifications\OrganizationWelcomeNotification;
@@ -24,7 +25,9 @@ class OrganizationRegistrationController extends Controller
     public function showRegistrationForm()
     {
         $memberTypes = MemberType::active()->get();
-        return view('public.organization-registration', compact('memberTypes'));
+        // Configurable adhesion unit fee (default $50)
+        $adhesionUnitFee = (float) Setting::get('adhesion_unit_fee', 50);
+        return view('public.organization-registration', compact('memberTypes', 'adhesionUnitFee'));
     }
 
     /**

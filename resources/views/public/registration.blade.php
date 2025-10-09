@@ -190,37 +190,15 @@
                     <!-- Méthode de paiement -->
                     <div class="mb-8">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Méthode de paiement</h3>
-                        <div>
-                            <label for="payment_method" class="block text-sm font-medium text-gray-700">Choisissez votre méthode de paiement *</label>
-                            <div class="mt-2 space-y-3">
-                                <div class="flex items-center">
-                                    <input id="payment_interac" name="payment_method" type="radio" value="interac" 
-                                           {{ old('payment_method') == 'interac' ? 'checked' : '' }}
-                                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-                                    <label for="payment_interac" class="ml-3 block text-sm font-medium text-gray-700">
-                                        <span class="flex items-center">
-                                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                            </svg>
-                                            Interac e-Transfer
-                                        </span>
-                                        <span class="text-xs text-gray-500">Paiement instantané par email</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="flex items-center">
-                                    <input id="payment_bank" name="payment_method" type="radio" value="bank_transfer" 
-                                           {{ old('payment_method') == 'bank_transfer' ? 'checked' : '' }}
-                                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-                                    <label for="payment_bank" class="ml-3 block text-sm font-medium text-gray-700">
-                                        <span class="flex items-center">
-                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                                            </svg>
-                                            Virement bancaire
-                                        </span>
-                                        <span class="text-xs text-gray-500">Instructions de paiement par email</span>
-                                    </label>
+                        <input type="hidden" name="payment_method" value="stripe">
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.274 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.386-2.399 1.386-1.87 0-4.807-.921-6.47-1.797l-.89 5.494C5.713 22.99 8.426 24 11.564 24c2.508 0 4.47-.654 5.89-1.818 1.498-1.188 2.266-3.041 2.266-5.282 0-4.128-2.524-5.851-6.744-7.75z"/>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-blue-800">Carte de crédit (Stripe) — Recommandé</p>
+                                    <p class="text-xs text-blue-700">Paiement sécurisé en ligne en temps réel après l'inscription</p>
                                 </div>
                             </div>
                         </div>

@@ -36,7 +36,7 @@ class HomeController extends Controller
                 // If PageContent table doesn't exist or has issues, use default content
                 $content = (object) [
                     'title' => 'Solidarité & Entraide',
-                    'content' => 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.'
+                    'content' => "L'Association Westmount Canada est une communauté solidaire et d'entraide qui vise à apporter un soutien à la famille d'un membre décédé. Ce soutien inclut notamment une aide financière pour aider la famille à faire face aux défis quotidiens."
                 ];
             }
 
@@ -52,7 +52,7 @@ class HomeController extends Controller
             $memberTypes = collect([]);
             $content = (object) [
                 'title' => 'Solidarité & Entraide',
-                'content' => 'Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.'
+                'content' => "L'Association Westmount Canada est une communauté solidaire et d'entraide qui vise à apporter un soutien à la famille d'un membre décédé. Ce soutien inclut notamment une aide financière pour aider la famille à faire face aux défis quotidiens."
             ];
 
             return view('public.home', compact('stats', 'memberTypes', 'content'));

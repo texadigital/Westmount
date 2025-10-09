@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth.member' => \App\Http\Middleware\MemberAuth::class,
         ]);
+
+        // Exclude Stripe webhook from CSRF protection so Stripe can POST
+        $middleware->validateCsrfTokens(except: [
+            'webhook/stripe',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -28,7 +28,7 @@
             <!-- Default Content -->
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
                 <!-- Service 1 -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <a href="{{ route('public.registration.form') }}" class="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-blue-500 rounded-md flex items-center justify-center">
@@ -40,12 +40,12 @@
                         <h3 class="ml-4 text-xl font-semibold text-gray-900">Adhésion et Gestion des Membres</h3>
                     </div>
                     <p class="text-gray-600">
-                        Gestion complète des adhésions, renouvellements et informations des membres avec un système en ligne sécurisé.
+                        Gestion complète des adhésions, renouvellements et informations des membres  un système en ligne sécurisé.
                     </p>
-                </div>
+                </a>
 
                 <!-- Service 2 -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <a href="{{ route('public.death-contributions') }}" class="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-green-500 rounded-md flex items-center justify-center">
@@ -59,10 +59,10 @@
                     <p class="text-gray-600">
                         Système de gestion des contributions avec paiements sécurisés par virement bancaire et Interac.
                     </p>
-                </div>
+                </a>
 
                 <!-- Service 3 -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <a href="{{ route('public.technical-support') }}" class="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-yellow-500 rounded-md flex items-center justify-center">
@@ -76,10 +76,10 @@
                     <p class="text-gray-600">
                         Support technique complet et assistance pour tous nos membres avec une équipe dédiée.
                     </p>
-                </div>
+                </a>
 
                 <!-- Service 4 -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <a href="{{ route('public.online-management') }}" class="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-purple-500 rounded-md flex items-center justify-center">
@@ -93,7 +93,7 @@
                     <p class="text-gray-600">
                         Plateforme en ligne complète pour la gestion de votre compte membre et de vos documents.
                     </p>
-                </div>
+                </a>
             </div>
         @endif
     </div>

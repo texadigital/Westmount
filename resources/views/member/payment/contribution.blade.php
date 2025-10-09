@@ -106,8 +106,34 @@
                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
 
-                    <!-- Section Virement bancaire -->
+                    <!-- Méthode de paiement -->
                     <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Méthode de paiement</label>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <input type="radio" id="stripe" name="payment_method" value="stripe" checked class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="stripe" class="ml-3 block text-sm font-medium text-gray-700">Carte de crédit (Stripe) - Recommandé</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="bank_transfer" class="ml-3 block text-sm font-medium text-gray-700">Virement bancaire</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="interac" name="payment_method" value="interac" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="interac" class="ml-3 block text-sm font-medium text-gray-700">Interac e-Transfer</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carte (Stripe) -->
+                    <div id="stripe-card-section" class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Informations de la carte</label>
+                        <div id="card-element" class="p-3 border border-gray-300 rounded-md"></div>
+                        <div id="card-errors" class="mt-2 text-sm text-red-600" role="alert"></div>
+                    </div>
+
+                    <!-- Section Virement bancaire -->
+                    <div id="bank-section" class="mb-6 hidden">
                         <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
                             <h4 class="text-sm font-medium text-blue-800 mb-2">Informations pour virement bancaire</h4>
                             <div class="text-sm text-blue-700 space-y-1">
@@ -175,6 +201,7 @@
     </div>
 </div>
 
+<script src="https://js.stripe.com/v3"></script>
 <script>
 let selectedContributions = [];
 let totalAmount = 0;
@@ -185,6 +212,40 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('submit-button');
     const buttonText = document.getElementById('button-text');
     const spinner = document.getElementById('spinner');
+    const methodStripe = document.getElementById('stripe');
+    const methodBank = document.getElementById('bank_transfer');
+    const methodInterac = document.getElementById('interac');
+    const stripeCardSection = document.getElementById('stripe-card-section');
+    const bankSection = document.getElementById('bank-section');
+    const stripePublicKey = @json(\App\Models\Setting::get('stripe_key', config('services.stripe.key')));
+    const stripe = stripePublicKey ? Stripe(stripePublicKey) : null;
+    let cardElement = null;
+
+    if (stripe) {
+        const elements = stripe.elements();
+        cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+        cardElement.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            displayError.textContent = event.error ? event.error.message : '';
+        });
+    }
+
+    function toggleSections() {
+        if (methodStripe.checked) {
+            stripeCardSection.classList.remove('hidden');
+            bankSection.classList.add('hidden');
+        } else if (methodBank.checked) {
+            stripeCardSection.classList.add('hidden');
+            bankSection.classList.remove('hidden');
+        } else {
+            stripeCardSection.classList.add('hidden');
+            bankSection.classList.add('hidden');
+        }
+    }
+
+    [methodStripe, methodBank, methodInterac].forEach(r => r.addEventListener('change', toggleSections));
+    toggleSections();
     
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -200,26 +261,77 @@ document.addEventListener('DOMContentLoaded', function() {
         spinner.classList.remove('hidden');
         
         try {
-            const response = await fetch('{{ route("member.payment.contribution.process") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    amount: totalAmount,
-                    description: document.getElementById('description').value,
-                    contributions: selectedContributions
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                // Paiement créé avec succès, rediriger vers la page de confirmation
-                window.location.href = '{{ route("member.membership") }}?payment=created';
+            const method = document.querySelector('input[name="payment_method"]:checked')?.value;
+
+            if (method === 'stripe') {
+                if (!stripe || !cardElement) {
+                    throw new Error('Stripe non configuré.');
+                }
+
+                const response = await fetch('{{ route('member.payment.contribution.process') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        description: document.getElementById('description').value,
+                        payment_method: 'stripe',
+                        contributions: selectedContributions
+                    })
+                });
+                const result = await response.json();
+                if (!result.success || !result.client_secret) {
+                    throw new Error(result.message || 'Erreur lors de la création du paiement Stripe');
+                }
+
+                const { error, paymentIntent } = await stripe.confirmCardPayment(result.client_secret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: @json($member->full_name),
+                            email: @json($member->email),
+                        }
+                    }
+                });
+
+                if (error) {
+                    throw new Error(error.message || 'Paiement refusé');
+                }
+
+                await fetch('{{ route('member.payment.confirm') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ payment_intent_id: paymentIntent.id })
+                }).catch(() => {});
+
+                window.location.href = '{{ route('member.membership') }}?payment=success';
+                return;
             } else {
-                throw new Error(result.message || 'Erreur lors de la création du paiement');
+                // Offline methods
+                const response = await fetch('{{ route('member.payment.contribution.process') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        description: document.getElementById('description').value,
+                        payment_method: method,
+                        contributions: selectedContributions
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = '{{ route('member.membership') }}?payment=created';
+                } else {
+                    throw new Error(result.message || 'Erreur lors de la création du paiement');
+                }
             }
         } catch (error) {
             console.error('Erreur:', error);

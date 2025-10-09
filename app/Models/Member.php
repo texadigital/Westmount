@@ -117,6 +117,14 @@ class Member extends Model
     }
 
     /**
+     * Relation avec les contributions décès
+     */
+    public function deathContributions(): HasMany
+    {
+        return $this->hasMany(DeathContribution::class);
+    }
+
+    /**
      * Relation avec les parrainages
      */
     public function sponsorships(): HasMany
@@ -218,6 +226,28 @@ class Member extends Model
     public function isLapsed(): bool
     {
         return $this->activeMembership && $this->activeMembership->status === 'lapsed';
+    }
+
+    /**
+     * Statut de conformité: En règle / En retard / Caduque
+     */
+    public function getComplianceStatusAttribute(): string
+    {
+        // Caduque si l'adhésion est caduque
+        if ($this->isLapsed()) {
+            return 'Caduque';
+        }
+
+        // En retard si au moins une contribution décès est overdue
+        $hasOverdueDeath = $this->deathContributions()
+            ->where('status', 'overdue')
+            ->exists();
+
+        if ($hasOverdueDeath || ($this->activeMembership && $this->activeMembership->isOverdue())) {
+            return 'En retard';
+        }
+
+        return 'En règle';
     }
 
     /**

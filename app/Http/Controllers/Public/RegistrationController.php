@@ -8,10 +8,14 @@ use App\Models\MemberType;
 use App\Models\Sponsorship;
 use App\Models\Membership;
 use App\Models\Payment;
+use App\Models\User;
+use App\Models\Setting;
 use App\Notifications\WelcomeMemberNotification;
+use App\Notifications\AdminNewRegistrationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 
 class RegistrationController extends Controller
@@ -44,7 +48,7 @@ class RegistrationController extends Controller
             'canadian_status_proof' => 'required|string|max:255',
             'member_type_id' => 'required|exists:member_types,id',
             'sponsorship_code' => 'nullable|string|exists:sponsorships,sponsorship_code',
-            'payment_method' => 'required|in:interac,bank_transfer',
+            'payment_method' => 'required|in:stripe',
             'pin_code' => 'required|string|min:4|max:6|unique:members,pin_code',
             'pin_code_confirmation' => 'required|same:pin_code',
             'organization_id' => 'nullable|exists:organizations,id',
@@ -170,6 +174,20 @@ class RegistrationController extends Controller
 
             // Envoyer la notification de bienvenue
             $member->notify(new WelcomeMemberNotification($member));
+
+            // Notifier l'admin de la nouvelle inscription
+            try {
+                $adminEmail = Setting::get('admin_notification_email', env('ADMIN_NOTIFICATION_EMAIL'));
+                if ($adminEmail) {
+                    Notification::route('mail', $adminEmail)->notify(new AdminNewRegistrationNotification($member));
+                }
+                // Notifier tous les utilisateurs admin (si présents)
+                foreach (User::all() as $adminUser) {
+                    $adminUser->notify(new AdminNewRegistrationNotification($member));
+                }
+            } catch (\Throwable $e) {
+                // Ne pas bloquer le flux en cas d'échec d'email
+            }
 
             // Auto-login the member after registration
             $request->session()->put('member_id', $member->id);

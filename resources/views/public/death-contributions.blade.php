@@ -38,8 +38,8 @@
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <h3 class="text-lg font-semibold text-gray-900">Cotisation mensuelle</h3>
-                                <p class="text-gray-600">Chaque membre contribue mensuellement selon sa catégorie</p>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $dc['step1_title'] ?? 'Contribution en cas de décès' }}</h3>
+                                <p class="text-gray-600">{!! nl2br(e($dc['step1_body'] ?? 'Chaque membre contribue selon sa catégorie')) !!}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -49,8 +49,8 @@
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <h3 class="text-lg font-semibold text-gray-900">Fonds de solidarité</h3>
-                                <p class="text-gray-600">Les contributions sont versées dans un fonds de solidarité</p>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $dc['step2_title'] ?? 'Fonds de solidarité' }}</h3>
+                                <p class="text-gray-600">{!! nl2br(e($dc['step2_body'] ?? 'Les contributions sont versées dans un fonds de solidarité')) !!}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -60,8 +60,8 @@
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <h3 class="text-lg font-semibold text-gray-900">Aide financière</h3>
-                                <p class="text-gray-600">En cas de décès, la famille reçoit une aide financière</p>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $dc['step3_title'] ?? 'Aide financière' }}</h3>
+                                <p class="text-gray-600">{!! nl2br(e($dc['step3_body'] ?? 'En cas de décès, la famille reçoit une aide financière')) !!}</p>
                             </div>
                         </div>
                     </div>
@@ -70,23 +70,21 @@
                 <!-- Rates Card -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">Tarifs des Contributions</h2>
+                    <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                        <p class="text-blue-800 text-sm">
+                            Pour les associations: <strong>Contribution unitaire</strong> x <strong>Nombre de membres</strong><br>
+                            Soit <strong>${{ number_format($unitContribution, 0) }} CAD</strong> x nombre de membres
+                        </p>
+                    </div>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-gray-700">Membres réguliers</span>
-                            <span class="text-lg font-semibold text-blue-600">10$ CAD</span>
-                        </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-gray-700">Membres seniors</span>
-                            <span class="text-lg font-semibold text-blue-600">2$ CAD</span>
-                        </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-gray-700">Membres juniors</span>
-                            <span class="text-lg font-semibold text-blue-600">2$ CAD</span>
-                        </div>
-                        <div class="flex justify-between items-center py-2">
-                            <span class="text-gray-700">Associations</span>
-                            <span class="text-lg font-semibold text-blue-600">10$ CAD</span>
-                        </div>
+                        @forelse(($memberTypes ?? []) as $type)
+                            <div class="flex justify-between items-center py-2 {{ !$loop->last ? 'border-b border-gray-200' : '' }}">
+                                <span class="text-gray-700">{{ $type->name }}</span>
+                                <span class="text-lg font-semibold text-blue-600">${{ number_format($type->death_contribution, 0) }} CAD</span>
+                            </div>
+                        @empty
+                            <p class="text-gray-600">Les types de membres ne sont pas configurés pour le moment.</p>
+                        @endforelse
                     </div>
                 </div>
             </div>

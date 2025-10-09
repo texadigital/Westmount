@@ -12,7 +12,7 @@
                     Solidarité & Entraide
                 </h1>
                 <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                    Rejoignez une communauté qui se soutient mutuellement dans les moments difficiles. Ensemble, nous sommes plus forts.
+                    L'Association Westmount Canada est une communauté solidaire et d'entraide qui vise à apporter un soutien à la famille d'un membre décédé. Ce soutien inclut notamment une aide financière pour aider la famille à faire face aux défis quotidiens.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="{{ route('public.registration.form') }}" 
@@ -20,10 +20,10 @@
                             <i class="fas fa-user-plus mr-2"></i>
                             Rejoindre l'Association
                         </a>
-                    <a href="#about" 
+                    <a href="{{ route('member.login') }}" 
                        class="border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        En savoir plus
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Connexion
                     </a>
                 </div>
             </div>
@@ -68,9 +68,7 @@
                 <div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-6">Notre Mission</h3>
                     <p class="text-gray-600 mb-6">
-                        Depuis plus de 25 ans, nous offrons un soutien financier et moral à nos membres 
-                        lors des décès d'un proche. Notre système de contributions mutuelles permet 
-                        de partager les coûts et de s'entraider dans les moments les plus difficiles.
+                    Nous offrons un soutien financier et moral à nos membres lors du décès d'un proche. Notre système de contributions permet d’optimiser l’entraide dans les moments les plus difficiles.
                     </p>
                     <div class="space-y-4">
                         <div class="flex items-start">
@@ -143,7 +141,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Contributions Décès</h3>
                     <p class="text-gray-600 mb-6">
-                        Soutien financier immédiat lors du décès d'un proche pour couvrir les frais funéraires
+                        Soutien financier immédiat lors du décès d'un proche.
                     </p>
                     <ul class="text-left text-sm text-gray-600 space-y-2">
                         <li>• Montant selon le type de membre</li>
@@ -189,7 +187,7 @@
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Types d'Adhésion</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Types d'Adhésions</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                     Choisissez le type d'adhésion qui correspond à votre situation
                 </p>
@@ -211,7 +209,7 @@
                     </ul>
                     <a href="{{ route('public.registration.form') }}" 
                        class="w-full bg-primary text-white hover:bg-blue-700 font-bold py-2 px-4 rounded-lg text-center block transition duration-300">
-                        S'inscrire avec un parrain
+                        S'inscrire
                     </a>
                 </div>
                 @endforeach
@@ -332,28 +330,38 @@
                             <i class="fas fa-map-marker-alt text-primary mt-1 mr-4"></i>
                             <div>
                                 <h4 class="font-semibold text-gray-900">Adresse</h4>
-                                <p class="text-gray-600">123 Rue Westmount<br>Montréal, QC H3Z 1A1</p>
+                                <p class="text-gray-600">123 Rue Westmount<br>Montréal, QC H3Z 1A1<br>Canada</p>
                             </div>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-phone text-primary mt-1 mr-4"></i>
                             <div>
                                 <h4 class="font-semibold text-gray-900">Téléphone</h4>
-                                <p class="text-gray-600">(514) 123-4567</p>
+                                <p class="text-gray-600">
+                                    <a href="tel:+15141234567" class="hover:text-primary">(514) 123-4567</a><br>
+                                    <span class="text-sm text-gray-500">Lun - Ven: 9h00 - 17h00</span>
+                                </p>
                             </div>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-envelope text-primary mt-1 mr-4"></i>
                             <div>
                                 <h4 class="font-semibold text-gray-900">Email</h4>
-                                <p class="text-gray-600">info@associationwestmount.com</p>
+                                <p class="text-gray-600">
+                                    <a href="mailto:contact@associationwestmount.com" class="hover:text-primary">info@associationwestmount.com</a><br>
+                                    <span class="text-sm text-gray-500">Réponse sous 24h</span>
+                                </p>
                             </div>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-clock text-primary mt-1 mr-4"></i>
                             <div>
                                 <h4 class="font-semibold text-gray-900">Heures d'ouverture</h4>
-                                <p class="text-gray-600">Lun - Ven: 9h00 - 17h00<br>Sam: 9h00 - 13h00</p>
+                                <div class="text-gray-600">
+                                    <p><strong>Lundi - Vendredi:</strong> 9h00 - 17h00</p>
+                                    <p><strong>Samedi:</strong> 9h00 - 13h00</p>
+                                    <p><strong>Dimanche:</strong> Fermé</p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -11,20 +11,36 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Check if the columns exist before trying to drop them
-        if (Schema::hasColumn('page_contents', 'section')) {
-            Schema::table('page_contents', function (Blueprint $table) {
-                $table->dropColumn(['section', 'key', 'value', 'type', 'sort_order']);
-            });
-        }
-        
-        // Add new columns
+        // Drop legacy columns if they exist
         Schema::table('page_contents', function (Blueprint $table) {
-            $table->string('title')->nullable();
-            $table->longText('content')->nullable();
-            $table->string('content_type')->default('text');
-            $table->boolean('is_published')->default(true);
-            $table->integer('order')->default(0);
+            $columnsToDrop = [];
+            foreach (['section', 'key', 'value', 'type', 'sort_order', 'content_type', 'is_published', 'order'] as $col) {
+                if (Schema::hasColumn('page_contents', $col)) {
+                    $columnsToDrop[] = $col;
+                }
+            }
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
+        });
+
+        // Add expected columns only if missing
+        Schema::table('page_contents', function (Blueprint $table) {
+            if (!Schema::hasColumn('page_contents', 'title')) {
+                $table->string('title')->nullable();
+            }
+            if (!Schema::hasColumn('page_contents', 'content')) {
+                $table->longText('content')->nullable();
+            }
+            if (!Schema::hasColumn('page_contents', 'meta_title')) {
+                $table->string('meta_title')->nullable();
+            }
+            if (!Schema::hasColumn('page_contents', 'meta_description')) {
+                $table->text('meta_description')->nullable();
+            }
+            if (!Schema::hasColumn('page_contents', 'is_active')) {
+                $table->boolean('is_active')->default(true);
+            }
         });
     }
 
@@ -34,15 +50,35 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('page_contents', function (Blueprint $table) {
-            $table->dropColumn(['title', 'content', 'content_type', 'is_published', 'order']);
+            $columnsToDrop = [];
+            foreach (['title', 'content', 'meta_title', 'meta_description', 'is_active'] as $col) {
+                if (Schema::hasColumn('page_contents', $col)) {
+                    $columnsToDrop[] = $col;
+                }
+            }
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
         });
-        
+
+        // Optionally restore legacy columns
         Schema::table('page_contents', function (Blueprint $table) {
-            $table->string('section')->index();
-            $table->string('key')->index();
-            $table->longText('value');
-            $table->string('type')->default('text');
-            $table->integer('sort_order')->default(0);
+            if (!Schema::hasColumn('page_contents', 'section')) {
+                $table->string('section')->index();
+            }
+            if (!Schema::hasColumn('page_contents', 'key')) {
+                $table->string('key')->index();
+            }
+            if (!Schema::hasColumn('page_contents', 'value')) {
+                $table->longText('value');
+            }
+            if (!Schema::hasColumn('page_contents', 'type')) {
+                $table->string('type')->default('text');
+            }
+            if (!Schema::hasColumn('page_contents', 'sort_order')) {
+                $table->integer('sort_order')->default(0);
+            }
         });
     }
 };
+

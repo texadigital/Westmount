@@ -214,20 +214,19 @@
                         Association Westmount
                     </h3>
                     <p class="text-gray-400 mb-4">
-                        Une communauté d'entraide et de solidarité qui accompagne ses membres 
-                        dans les moments difficiles depuis plus de 25 ans.
+                        {{ \App\Models\Setting::get('footer_about_text', "Une communauté d'entraide et de solidarité qui accompagne ses membres dans les moments difficiles. ") }}
                     </p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <a href="{{ \App\Models\Setting::get('footer_facebook') ?? '#' }}" class="text-gray-400 hover:text-white transition duration-300">
                             <i class="fab fa-facebook text-xl"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <a href="{{ \App\Models\Setting::get('footer_twitter') ?? '#' }}" class="text-gray-400 hover:text-white transition duration-300">
                             <i class="fab fa-twitter text-xl"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <a href="{{ \App\Models\Setting::get('footer_linkedin') ?? '#' }}" class="text-gray-400 hover:text-white transition duration-300">
                             <i class="fab fa-linkedin text-xl"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <a href="{{ \App\Models\Setting::get('footer_instagram') ?? '#' }}" class="text-gray-400 hover:text-white transition duration-300">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
                     </div>
@@ -245,11 +244,11 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Services</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contributions décès</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Système de parrainage</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Gestion en ligne</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Support technique</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQ</a></li>
+                        <li><a href="{{ route('public.death-contributions') }}" class="text-gray-400 hover:text-white transition duration-300">Contributions décès</a></li>
+                        <li><a href="{{ route('public.sponsorship') }}" class="text-gray-400 hover:text-white transition duration-300">Système de parrainage</a></li>
+                        <li><a href="{{ route('public.online-management') }}" class="text-gray-400 hover:text-white transition duration-300">Gestion en ligne</a></li>
+                        <li><a href="{{ route('public.technical-support') }}" class="text-gray-400 hover:text-white transition duration-300">Support technique</a></li>
+                        <li><a href="{{ route('public.faq') }}" class="text-gray-400 hover:text-white transition duration-300">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
@@ -257,19 +256,22 @@
                     <ul class="space-y-2 text-gray-400">
                         <li class="flex items-center">
                             <i class="fas fa-phone mr-3 text-primary"></i>
-                            <a href="tel:+15141234567" class="hover:text-white transition duration-300">(514) 123-4567</a>
+                            @php($phone = \App\Models\Setting::get('footer_phone', '514-566-4029'))
+                            <a href="tel:{{ preg_replace('/[^\d\+]/', '', $phone) }}" class="hover:text-white transition duration-300">{{ $phone }}</a>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-3 text-primary"></i>
-                            <a href="mailto:info@associationwestmount.com" class="hover:text-white transition duration-300">info@associationwestmount.com</a>
+                            @php($email = \App\Models\Setting::get('footer_email', 'info@associationwestmount.com'))
+                            <a href="mailto:{{ $email }}" class="hover:text-white transition duration-300">{{ $email }}</a>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-map-marker-alt mr-3 text-primary"></i>
-                            <span>Montréal, QC, Canada</span>
+                            @php($addr = \App\Models\Setting::get('footer_address', "573 Pierre-Dugua-De Mons, L'Assomption, QC J5W 0E3\nCANADA"))
+                            <span>{!! nl2br(e($addr)) !!}</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-clock mr-3 text-primary"></i>
-                            <span>Lun-Ven: 9h-17h</span>
+                            <span>{{ \App\Models\Setting::get('footer_hours', 'Lun-Ven: 9h-17h') }}</span>
                         </li>
                     </ul>
                 </div>

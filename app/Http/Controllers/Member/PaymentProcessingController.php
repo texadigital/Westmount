@@ -4,18 +4,27 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Services\PaymentService;
+use App\Services\StripePaymentService;
 use App\Models\Payment;
 use App\Models\Member;
+use App\Notifications\PaymentReceivedNotification;
+use App\Notifications\AdminPaymentReceivedNotification;
+use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use Stripe\Webhook as StripeWebhook;
 
 class PaymentProcessingController extends Controller
 {
     protected $paymentService;
+    protected $stripePaymentService;
 
-    public function __construct(PaymentService $paymentService)
+    public function __construct(PaymentService $paymentService, StripePaymentService $stripePaymentService)
     {
         $this->paymentService = $paymentService;
+        $this->stripePaymentService = $stripePaymentService;
     }
 
     /**
@@ -131,7 +140,7 @@ class PaymentProcessingController extends Controller
         ]);
 
         $request->validate([
-            'payment_method' => 'required|in:interac,bank_transfer',
+            'payment_method' => 'required|in:interac,bank_transfer,stripe',
         ]);
 
         $member = $request->attributes->get('current_member');
@@ -158,6 +167,48 @@ class PaymentProcessingController extends Controller
         }
 
         try {
+            // Route by payment method
+            if ($request->payment_method === 'stripe') {
+                $amount = $activeMembership->member->memberType->adhesion_fee;
+
+                // Create PaymentIntent via Stripe
+                $intent = $this->stripePaymentService->createPaymentIntent(
+                    $member,
+                    $amount,
+                    'adhesion',
+                    ['membership_id' => $activeMembership->id]
+                );
+
+                if (!$intent) {
+                    throw new \RuntimeException('Impossible de créer le paiement Stripe.');
+                }
+
+                // Persist payment row linked to the Stripe intent
+                $payment = Payment::create([
+                    'member_id' => $member->id,
+                    'membership_id' => $activeMembership->id,
+                    'type' => 'adhesion',
+                    'amount' => $amount,
+                    'currency' => 'CAD',
+                    'status' => 'pending',
+                    'payment_method' => 'stripe',
+                    'stripe_payment_intent_id' => $intent->id,
+                    'description' => "Paiement d'adhésion - ".$member->full_name,
+                ]);
+
+                $response = [
+                    'success' => true,
+                    'payment_id' => $payment->id,
+                    'amount' => $payment->amount,
+                    'currency' => $payment->currency,
+                    'payment_method' => $payment->payment_method,
+                    'client_secret' => $intent->client_secret,
+                ];
+
+                return response()->json($response);
+            }
+
+            // Default to offline methods (Interac / Bank transfer)
             $payment = $this->paymentService->createAdhesionPayment(
                 $member,
                 $activeMembership,
@@ -173,13 +224,11 @@ class PaymentProcessingController extends Controller
                 'payment_method' => $payment->payment_method,
             ];
 
-            // Add Interac details if using Interac
             if ($payment->payment_method === 'interac') {
                 $response['interac_reference'] = $payment->interac_reference;
                 $response['interac_info'] = $this->paymentService->getInteracInfo();
             }
 
-            // Add bank transfer details if using bank transfer
             if ($payment->payment_method === 'bank_transfer') {
                 $response['bank_reference'] = $payment->bank_reference;
                 $response['banking_info'] = $this->paymentService->getBankingInfo();
@@ -210,6 +259,127 @@ class PaymentProcessingController extends Controller
     }
 
     /**
+     * Confirmer un paiement Stripe (fallback côté serveur)
+     */
+    public function confirmPayment(Request $request)
+    {
+        $request->validate([
+            'payment_intent_id' => 'required|string',
+        ]);
+
+        $payment = Payment::where('stripe_payment_intent_id', $request->payment_intent_id)->first();
+
+        if (!$payment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Paiement non trouvé.',
+            ], 404);
+        }
+
+        $success = $this->stripePaymentService->confirmPayment($payment);
+
+        if ($success) {
+            // Notify the member
+            try {
+                $payment->member?->notify(new PaymentReceivedNotification($payment));
+            } catch (\Throwable $e) {
+                Log::warning('Notification paiement non envoyée', ['payment_id' => $payment->id, 'error' => $e->getMessage()]);
+            }
+
+            // Notify admin(s)
+            try {
+                $adminEmail = Setting::get('admin_notification_email', env('ADMIN_NOTIFICATION_EMAIL'));
+                if ($adminEmail) {
+                    Notification::route('mail', $adminEmail)->notify(new AdminPaymentReceivedNotification($payment));
+                }
+                foreach (User::all() as $adminUser) {
+                    $adminUser->notify(new AdminPaymentReceivedNotification($payment));
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Admin notification paiement non envoyée', ['payment_id' => $payment->id, 'error' => $e->getMessage()]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Paiement confirmé.',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Paiement non confirmé.',
+        ], 400);
+    }
+
+    /**
+     * Webhook Stripe pour mises à jour en temps réel
+     */
+    public function webhook(Request $request)
+    {
+        $payload = $request->getContent();
+        $sigHeader = $request->header('Stripe-Signature');
+        $endpointSecret = Setting::get('stripe_webhook_secret', config('services.stripe.webhook.secret'));
+
+        if (!$endpointSecret) {
+            Log::error('Stripe webhook secret not configured');
+            return response()->json(['error' => 'Webhook non configuré'], 500);
+        }
+
+        try {
+            $event = StripeWebhook::constructEvent(
+                $payload,
+                $sigHeader,
+                $endpointSecret
+            );
+        } catch (\UnexpectedValueException $e) {
+            // Invalid payload
+            return response()->json(['error' => 'Payload invalide'], 400);
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Invalid signature
+            return response()->json(['error' => 'Signature invalide'], 400);
+        }
+
+        $type = $event['type'] ?? null;
+        $object = $event['data']['object'] ?? [];
+
+        if (in_array($type, ['payment_intent.succeeded', 'payment_intent.payment_failed'])) {
+            $intentId = $object['id'] ?? null;
+            if ($intentId) {
+                $payment = Payment::where('stripe_payment_intent_id', $intentId)->first();
+                if ($payment) {
+                    if ($type === 'payment_intent.succeeded') {
+                        // Confirm payment and notify
+                        if ($this->stripePaymentService->confirmPayment($payment)) {
+                            try {
+                                $payment->member?->notify(new PaymentReceivedNotification($payment));
+                            } catch (\Throwable $e) {
+                                Log::warning('Notification paiement non envoyée (webhook)', ['payment_id' => $payment->id, 'error' => $e->getMessage()]);
+                            }
+
+                            // Notify admin(s)
+                            try {
+                                $adminEmail = Setting::get('admin_notification_email', env('ADMIN_NOTIFICATION_EMAIL'));
+                                if ($adminEmail) {
+                                    Notification::route('mail', $adminEmail)->notify(new AdminPaymentReceivedNotification($payment));
+                                }
+                                foreach (User::all() as $adminUser) {
+                                    $adminUser->notify(new AdminPaymentReceivedNotification($payment));
+                                }
+                            } catch (\Throwable $e) {
+                                Log::warning('Admin notification paiement non envoyée (webhook)', ['payment_id' => $payment->id, 'error' => $e->getMessage()]);
+                            }
+                        }
+                    } elseif ($type === 'payment_intent.payment_failed') {
+                        $payment->markAsFailed();
+                    }
+                }
+            }
+        }
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    /**
      * Traiter un paiement de contribution
      */
     public function processContributionPayment(Request $request)
@@ -217,12 +387,48 @@ class PaymentProcessingController extends Controller
         $request->validate([
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string|max:255',
-            'payment_method' => 'required|in:interac,bank_transfer',
+            'payment_method' => 'required|in:interac,bank_transfer,stripe',
         ]);
 
         $member = $request->attributes->get('current_member');
 
         try {
+            if ($request->payment_method === 'stripe') {
+                $amount = (float) $request->amount;
+
+                $intent = $this->stripePaymentService->createPaymentIntent(
+                    $member,
+                    $amount,
+                    'contribution',
+                    ['description' => $request->description]
+                );
+
+                if (!$intent) {
+                    throw new \RuntimeException('Impossible de créer le paiement Stripe.');
+                }
+
+                $payment = Payment::create([
+                    'member_id' => $member->id,
+                    'membership_id' => $member->activeMembership?->id,
+                    'type' => 'contribution',
+                    'amount' => $amount,
+                    'currency' => 'CAD',
+                    'status' => 'pending',
+                    'payment_method' => 'stripe',
+                    'stripe_payment_intent_id' => $intent->id,
+                    'description' => $request->description ?? ('Contribution - '.$member->full_name),
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'payment_id' => $payment->id,
+                    'amount' => $payment->amount,
+                    'currency' => $payment->currency,
+                    'payment_method' => $payment->payment_method,
+                    'client_secret' => $intent->client_secret,
+                ]);
+            }
+
             $payment = $this->paymentService->createContributionPayment(
                 $member,
                 $request->amount,
@@ -238,13 +444,11 @@ class PaymentProcessingController extends Controller
                 'payment_method' => $payment->payment_method,
             ];
 
-            // Add Interac details if using Interac
             if ($payment->payment_method === 'interac') {
                 $response['interac_reference'] = $payment->interac_reference;
                 $response['interac_info'] = $this->paymentService->getInteracInfo();
             }
 
-            // Add bank transfer details if using bank transfer
             if ($payment->payment_method === 'bank_transfer') {
                 $response['bank_reference'] = $payment->bank_reference;
                 $response['banking_info'] = $this->paymentService->getBankingInfo();

@@ -81,7 +81,7 @@
                     </div>
                     <ul class="space-y-2 text-gray-600">
                         <li>• Téléchargement des documents</li>
-                        <li>• Upload de documents requis</li>
+                        <li>• Téléversement de documents requis</li>
                         <li>• Gestion des certificats</li>
                         <li>• Archives personnelles</li>
                     </ul>

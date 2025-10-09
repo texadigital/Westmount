@@ -30,6 +30,9 @@ Route::get('/parrainage', [App\Http\Controllers\Public\SponsorshipController::cl
 Route::get('/gestion-en-ligne', [App\Http\Controllers\Public\OnlineManagementController::class, 'index'])->name('public.online-management');
 Route::get('/support-technique', [App\Http\Controllers\Public\TechnicalSupportController::class, 'index'])->name('public.technical-support');
 Route::get('/faq', [App\Http\Controllers\Public\FAQController::class, 'index'])->name('public.faq');
+// Published death events (public)
+Route::get('/deces', [App\Http\Controllers\Public\DeathEventsController::class, 'index'])->name('public.death-events.index');
+Route::get('/deces/{event}', [App\Http\Controllers\Public\DeathEventsController::class, 'show'])->name('public.death-events.show');
 
 // Routes d'enregistrement public
 Route::prefix('register')->name('public.registration.')->group(function () {
