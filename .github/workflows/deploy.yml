@@ -1,0 +1,85 @@
+name: Deploy App to VPS
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      APP_ROOT: ${{ secrets.APP_ROOT }} # e.g., /home/assoc/htdocs/associationwestmount.com
+      PHP_BINARY: ${{ secrets.PHP_BINARY }} # e.g., php or /usr/bin/php8.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install frontend deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Prepare SSH key/config
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          printf "Host vps\n  HostName %s\n  User %s\n  Port %s\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" "$SSH_HOST" "$SSH_USER" "${SSH_PORT:-22}" > ~/.ssh/config
+
+      - name: Ensure remote directory exists
+        run: ssh vps "mkdir -p '$APP_ROOT'"
+
+      - name: Sync code to server (rsync)
+        run: |
+          rsync -az --delete \
+            --exclude-from=deploy-exclude.txt \
+            -e "ssh" \
+            ./ vps:"$APP_ROOT/"
+
+      - name: Run server post-deploy tasks
+        run: |
+          ssh vps << 'EOSSH'
+          set -e
+          cd "$APP_ROOT"
+
+          # Require existing .env on server
+          if [ ! -f .env ]; then
+            echo "[ERROR] Missing .env at $APP_ROOT/.env" >&2
+            exit 1
+          fi
+
+          PHP_BIN=${PHP_BINARY:-php}
+
+          # Composer install on server (ensures extension compatibility)
+          composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
+
+          # Laravel optimize and migrate
+          mkdir -p storage/framework/{cache,data,sessions,views} bootstrap/cache
+          chmod -R ug+rw storage bootstrap/cache || true
+
+          $PHP_BIN artisan migrate --force
+          $PHP_BIN artisan config:cache
+          $PHP_BIN artisan route:cache || true
+          $PHP_BIN artisan view:cache || true
+
+          # Optional restarts if services present
+          if command -v systemctl >/dev/null 2>&1; then
+            sudo systemctl reload php-fpm 2>/dev/null || sudo systemctl reload php8.2-fpm 2>/dev/null || true
+            sudo systemctl reload nginx 2>/dev/null || sudo systemctl reload apache2 2>/dev/null || true
+          fi
+          EOSSH
+
+      - name: Deployment complete
+        run: echo "OK"
