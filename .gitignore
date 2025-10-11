@@ -73,8 +73,7 @@ prepare_*.bat
 *.sql
 *.dump
 
-# Auth
-/auth.json
+
 
 # Homestead
 Homestead.json
