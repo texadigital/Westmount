@@ -4,19 +4,21 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <div class="bg-white shadow">
-        <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                    Support Technique
-                </h1>
-                <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                    Nous sommes là pour vous aider
-                </p>
+    <!-- Hero Section (image + overlay) -->
+    <section class="relative text-white">
+        <div class="h-[320px] md:h-[420px] w-full">
+            <img src="https://images.unsplash.com/photo-1525186402429-b4ff38bedbec?auto=format&fit=crop&w=1920&q=80" alt="Support technique" class="w-full h-full object-cover" />
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-black/60"></div>
+        <div class="absolute inset-0 flex items-center">
+            <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6" style="text-shadow: 0 2px 6px rgba(0,0,0,.6)">Support Technique</h1>
+                    <p class="text-xl md:text-2xl max-w-3xl mx-auto" style="text-shadow: 0 1px 4px rgba(0,0,0,.6)">Nous sommes là pour vous aider</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Dynamic Content -->
     <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
