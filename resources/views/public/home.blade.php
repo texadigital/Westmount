@@ -4,27 +4,54 @@
 @section('description', 'Rejoignez l\'Association Westmount, une communauté d\'entraide et de solidarité qui soutient ses membres dans les moments difficiles.')
 
 @section('content')
-    <!-- Hero Section -->
-    <section id="home" class="bg-gradient-to-r from-primary to-blue-600 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                    Solidarité & Entraide
-                </h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                    L'Association Westmount Canada est une communauté solidaire et d'entraide qui vise à apporter un soutien à la famille d'un membre décédé. Ce soutien inclut notamment une aide financière pour aider la famille à faire face aux défis quotidiens.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+    <!-- Hero Section with Swiper Slider -->
+    <section id="home" class="relative text-white">
+        <!-- Slider -->
+        <div class="swiper hero-swiper h-[420px] md:h-[560px] z-0">
+            <div class="swiper-wrapper">
+                <!-- Slide 1 (community/solidarity) -->
+                <div class="swiper-slide">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1920&q=80" alt="Communauté solidaire" class="w-full h-full object-cover" />
+                </div>
+                <!-- Slide 2 (support/helping hands) -->
+                <div class="swiper-slide">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80" alt="Soutien et entraide" class="w-full h-full object-cover" />
+                </div>
+                <!-- Slide 3 (family/comfort) -->
+                <div class="swiper-slide">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80" alt="Famille et compassion" class="w-full h-full object-cover" />
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+
+        <!-- Overlay gradient for readability -->
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-black/30 z-10"></div>
+
+        <!-- Overlay content -->
+        <div class="absolute inset-0 flex items-center z-20">
+            <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                        Solidarité & Entraide
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                        L'Association Westmount Canada est une communauté solidaire et d'entraide qui vise à apporter un soutien à la famille d'un membre décédé. Ce soutien inclut notamment une aide financière pour aider la famille à faire face aux défis quotidiens.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="{{ route('public.registration.form') }}" 
                            class="bg-white text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105">
                             <i class="fas fa-user-plus mr-2"></i>
                             Rejoindre l'Association
                         </a>
-                    <a href="{{ route('member.login') }}" 
-                       class="border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
-                        <i class="fas fa-sign-in-alt mr-2"></i>
-                        Connexion
-                    </a>
+                        <a href="{{ route('member.login') }}" 
+                           class="border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
+                            <i class="fas fa-sign-in-alt mr-2"></i>
+                            Connexion
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -395,5 +422,34 @@
             </div>
         </div>
     </section>
+
+    @push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    @endpush
+
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper('.hero-swiper', {
+                loop: true,
+                effect: 'fade',
+                speed: 800,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        });
+    </script>
+    @endpush
 
 @endsection

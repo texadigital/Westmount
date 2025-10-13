@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PageContentSeeder::class,
             TeamMemberSeeder::class,
             FooterSettingsSeeder::class,
+            MassiveMembersSeeder::class,
         ]);
     }
 }
