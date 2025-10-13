@@ -276,6 +276,14 @@ class PaymentProcessingController extends Controller
             ], 404);
         }
 
+        // Idempotency: if payment already completed, consider it confirmed
+        if ($payment->status === 'completed') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Paiement déjà confirmé.',
+            ]);
+        }
+
         $success = $this->stripePaymentService->confirmPayment($payment);
 
         if ($success) {

@@ -60,7 +60,7 @@ class PaymentService
     /**
      * Créer un paiement de contribution
      */
-    public function createContributionPayment(Member $member, float $amount, string $description = null, string $paymentMethod = 'interac'): Payment
+    public function createContributionPayment(Member $member, float $amount, ?string $description = null, string $paymentMethod = 'interac'): Payment
     {
         $bankReference = null;
         $interacReference = null;
@@ -100,7 +100,7 @@ class PaymentService
     /**
      * Confirmer un paiement Interac
      */
-    public function confirmInteracPayment(Payment $payment, string $interacReference = null): bool
+    public function confirmInteracPayment(Payment $payment, ?string $interacReference = null): bool
     {
         try {
             $payment->update([
@@ -181,7 +181,7 @@ class PaymentService
     /**
      * Confirmer un paiement par virement bancaire
      */
-    public function confirmBankTransferPayment(Payment $payment, string $bankReference = null): bool
+    public function confirmBankTransferPayment(Payment $payment, ?string $bankReference = null): bool
     {
         try {
             $payment->update([
@@ -211,7 +211,7 @@ class PaymentService
     /**
      * Rembourser un paiement
      */
-    public function refundPayment(Payment $payment, float $amount = null): bool
+    public function refundPayment(Payment $payment, ?float $amount = null): bool
     {
         if ($payment->payment_method === 'interac') {
             return $this->refundInteracPayment($payment, $amount);
@@ -225,7 +225,7 @@ class PaymentService
     /**
      * Rembourser un paiement Interac
      */
-    private function refundInteracPayment(Payment $payment, float $amount = null): bool
+    private function refundInteracPayment(Payment $payment, ?float $amount = null): bool
     {
         try {
             $refundAmount = $amount ?? $payment->amount;
@@ -250,7 +250,7 @@ class PaymentService
     /**
      * Rembourser un paiement par virement bancaire
      */
-    private function refundBankTransferPayment(Payment $payment, float $amount = null): bool
+    private function refundBankTransferPayment(Payment $payment, ?float $amount = null): bool
     {
         try {
             $refundAmount = $amount ?? $payment->amount;

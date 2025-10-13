@@ -13,7 +13,7 @@ class BankTransferService
     /**
      * Créer un paiement par virement bancaire
      */
-    public function createBankTransferPayment(Member $member, float $amount, string $type, string $description = null): Payment
+    public function createBankTransferPayment(Member $member, float $amount, string $type, ?string $description = null): Payment
     {
         $payment = Payment::create([
             'member_id' => $member->id,
@@ -36,7 +36,7 @@ class BankTransferService
     /**
      * Confirmer un paiement par virement bancaire
      */
-    public function confirmBankTransferPayment(Payment $payment, string $bankReference = null): bool
+    public function confirmBankTransferPayment(Payment $payment, ?string $bankReference = null): bool
     {
         try {
             $payment->update([
@@ -62,7 +62,7 @@ class BankTransferService
     /**
      * Marquer un paiement par virement comme échoué
      */
-    public function markBankTransferFailed(Payment $payment, string $reason = null): bool
+    public function markBankTransferFailed(Payment $payment, ?string $reason = null): bool
     {
         try {
             $payment->update([

@@ -43,7 +43,8 @@
                                         Réactivation d'adhésion
                                     </h3>
                                     <div class="mt-2 text-sm text-yellow-700">
-                                        <p>Utilisez le code de réactivation qui vous a été envoyé pour réactiver votre adhésion à l'Association Westmount.</p>
+                                        <p>Saisissez le <strong>code de réactivation</strong> que vous avez reçu par email lors de la désactivation de votre adhésion.</p>
+                                        <p class="mt-2">Vous n'avez pas de code ? <a href="{{ route('public.contact') }}" class="underline">Contactez-nous</a> pour en obtenir un.</p>
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +60,7 @@
                             @error('lapsed_code')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
-                            <p class="mt-1 text-sm text-gray-500">Ce code vous a été envoyé par email lors de l'expiration de votre adhésion</p>
+                            <p class="mt-1 text-sm text-gray-500">Ce code a été envoyé à votre adresse email lorsque votre adhésion est devenue caduque.</p>
                         </div>
                     </div>
 

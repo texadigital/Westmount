@@ -39,8 +39,8 @@
                        class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('member.payments*') ? 'text-blue-600 bg-blue-50' : '' }}">
                         Mes paiements
                     </a>
-                    <a href="{{ route('sponsorship.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('sponsorship*') ? 'text-blue-600 bg-blue-50' : '' }}">
+                    <a href="{{ route('member.sponsorship.index') }}" 
+                       class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('member.sponsorship*') ? 'text-blue-600 bg-blue-50' : '' }}">
                         Parrainages
                     </a>
                     <a href="{{ route('member.profile') }}" 
@@ -99,7 +99,7 @@
                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                     Mes paiements
                 </a>
-                <a href="{{ route('sponsorship.index') }}" 
+                <a href="{{ route('member.sponsorship.index') }}" 
                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                     Parrainages
                 </a>

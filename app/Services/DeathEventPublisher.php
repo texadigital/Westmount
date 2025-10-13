@@ -42,7 +42,7 @@ class DeathEventPublisher
                     'total_amount' => $amount,
                     'currency' => 'CAD',
                     'status' => 'pending',
-                    'description' => 'Contribution décès: ' . $event->deceased_name,
+                    'description' => 'Selon le type de membre ' . $event->deceased_name,
                     'metadata' => [
                         'death_event_id' => $event->id,
                     ],

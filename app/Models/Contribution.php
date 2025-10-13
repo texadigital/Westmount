@@ -119,7 +119,7 @@ class Contribution extends Model
     /**
      * Marquer la contribution comme payée
      */
-    public function markAsPaid(Payment $payment = null): void
+    public function markAsPaid(?Payment $payment = null): void
     {
         $this->update([
             'status' => 'paid',

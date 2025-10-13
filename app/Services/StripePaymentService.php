@@ -126,7 +126,7 @@ class StripePaymentService
     /**
      * Rembourser un paiement
      */
-    public function refundPayment(Payment $payment, float $amount = null): bool
+    public function refundPayment(Payment $payment, ?float $amount = null): bool
     {
         if (!config('services.stripe.secret') || !$payment->stripe_charge_id) {
             return false;
