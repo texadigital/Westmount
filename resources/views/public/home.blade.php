@@ -60,7 +60,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">À propos de nous</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    L'Association Westmount est une organisation d'entraide et de solidarité qui accompagne ses membres dans les moments difficiles de la vie.
+                   
                 </p>
             </div>
             
@@ -330,7 +330,7 @@
                             <i class="fas fa-map-marker-alt text-primary mt-1 mr-4"></i>
                             <div>
                                 <h4 class="font-semibold text-gray-900">Adresse</h4>
-                                <p class="text-gray-600">123 Rue Westmount<br>Montréal, QC H3Z 1A1<br>Canada</p>
+                                <p class="text-gray-600">573 Pierre-Dugua-De Mons, L'Assomption, QC J5W 0E3<br>CANADA</p>
                             </div>
                         </div>
                         <div class="flex items-start">

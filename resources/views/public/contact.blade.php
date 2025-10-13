@@ -126,9 +126,8 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Adresse</h3>
                                 <p class="text-gray-600">
-                                    123 Rue Westmount<br>
-                                    Montréal, QC H3Z 1A1<br>
-                                    Canada
+                                    573 Pierre-Dugua-De Mons, L'Assomption, QC J5W 0E3<br>
+                                    CANADA
                                 </p>
                             </div>
                         </div>
