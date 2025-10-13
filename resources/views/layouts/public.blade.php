@@ -79,6 +79,11 @@
             font-family: 'Great Vibes', cursive;
         }
 
+        /* Larger responsive sizes for calligraphy headings */
+        main h1 { font-size: clamp(2.75rem, 6vw, 4.5rem); line-height: 1.1; }
+        main h2 { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.15; }
+        main h3 { font-size: clamp(1.75rem, 4vw, 2.75rem); line-height: 1.2; }
+
         /* Override common Tailwind blue utilities to gold/brown on public pages */
         .bg-blue-600 { background-color: var(--gold) !important; }
         .hover\:bg-blue-700:hover { background-color: var(--brown) !important; }

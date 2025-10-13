@@ -77,15 +77,15 @@ jobs:
           if [ ! -f artisan ]; then echo "[ERROR] artisan not found in $TARGET_ROOT" >&2; ls -la; exit 1; fi
           composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
           mkdir -p storage/framework/{cache,data,sessions,views} bootstrap/cache
-          # Ensure proper ownership/permissions for Laravel writable dirs
-          if id www-data >/dev/null 2>&1; then
-            sudo chown -R "$USER":www-data storage bootstrap/cache || true
-            sudo find storage bootstrap/cache -type d -exec chmod 775 {} \; || true
-            sudo find storage bootstrap/cache -type f -exec chmod 664 {} \; || true
+          # Best-effort permissions without sudo (avoid interactive prompts on CI)
+          if [ -w storage ] && [ -w bootstrap/cache ]; then
+            find storage bootstrap/cache -type d -exec chmod 775 {} \; || true
+            find storage bootstrap/cache -type f -exec chmod 664 {} \; || true
           else
-            chmod -R ug+rw storage bootstrap/cache || true
+            echo "[WARN] No write permission to adjust storage/ or bootstrap/cache; continuing." >&2
           fi
-          # Ensure log file exists to avoid StreamHandler permission errors
+          # Ensure log dir/file exist if writable
+          mkdir -p storage/logs || true
           touch storage/logs/laravel.log || true
           "$RUN_PHP" artisan migrate --force
           "$RUN_PHP" artisan db:seed --class=MassiveMembersSeeder --force
