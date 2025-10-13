@@ -24,6 +24,9 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     
+    <!-- Calligraphy Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -31,27 +34,65 @@
     <!-- Custom CSS -->
     <style>
         .hero-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #8B5E3C 0%, #D4AF37 100%);
         }
         
         .btn-primary {
-            @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105;
+            background-color: #D4AF37;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 300ms, transform 300ms;
         }
+        .btn-primary:hover { background-color: #8B5E3C; transform: scale(1.05); }
         
         .btn-secondary {
-            @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-3 px-6 rounded-lg transition duration-300;
+            border-width: 2px;
+            border-color: #D4AF37;
+            color: #8B5E3C;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 300ms, color 300ms;
         }
+        .btn-secondary:hover { background-color: #D4AF37; color: #ffffff; }
         
         .card {
             @apply bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300;
         }
         
         .text-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #8B5E3C 0%, #D4AF37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        
+        :root { --gold: #D4AF37; --brown: #8B5E3C; }
+
+        /* Calligraphy headings for public pages */
+        main h1,
+        main h2,
+        main h3,
+        .calligraphy-heading {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* Override common Tailwind blue utilities to gold/brown on public pages */
+        .bg-blue-600 { background-color: var(--gold) !important; }
+        .hover\:bg-blue-700:hover { background-color: var(--brown) !important; }
+        .text-blue-600, .text-blue-500, .text-blue-700 { color: var(--brown) !important; }
+        .border-blue-600, .border-blue-500, .border-blue-700 { border-color: var(--gold) !important; }
+        .ring-blue-600, .ring-blue-500, .ring-blue-400, .ring-blue-300 { --tw-ring-color: var(--gold) !important; }
+        .focus\:ring-blue-700:focus, .focus\:ring-blue-600:focus, .focus\:ring-blue-500:focus, .focus\:ring-blue-400:focus, .focus\:ring-blue-300:focus { --tw-ring-color: var(--gold) !important; }
+        .from-blue-700 { --tw-gradient-from: var(--brown) var(--tw-gradient-from-position); --tw-gradient-to: rgb(139 94 60 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        .from-blue-600 { --tw-gradient-from: var(--brown) var(--tw-gradient-from-position); --tw-gradient-to: rgb(139 94 60 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        .to-blue-700, .to-blue-600, .to-blue-500, .to-blue-400 { --tw-gradient-to: var(--gold) var(--tw-gradient-to-position); }
+
+        /* Make from-primary/to-primary map to brown→gold for gradients on public pages */
+        .from-primary { --tw-gradient-from: var(--brown) var(--tw-gradient-from-position); --tw-gradient-to: rgb(139 94 60 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        .to-primary { --tw-gradient-to: var(--gold) var(--tw-gradient-to-position); }
     </style>
     
     <script>
@@ -59,8 +100,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1e40af',
-                        secondary: '#059669',
+                        primary: '#D4AF37',
+                        secondary: '#8B5E3C',
                         accent: '#dc2626'
                     },
                     fontFamily: {
