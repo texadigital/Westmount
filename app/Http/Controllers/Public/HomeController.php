@@ -22,7 +22,7 @@ class HomeController extends Controller
             $stats = [
                 'total_members' => Member::where('is_active', true)->count(),
                 'total_funds' => Fund::where('is_active', true)->sum('current_balance'),
-                'years_active' => 25, // Static value for now
+                'years_active' => 1, // Static value for now
             ];
 
             // Get member types for pricing display
@@ -46,7 +46,7 @@ class HomeController extends Controller
             $stats = [
                 'total_members' => 500,
                 'total_funds' => 50000,
-                'years_active' => 25,
+                'years_active' => 1,
             ];
 
             $memberTypes = collect([]);
