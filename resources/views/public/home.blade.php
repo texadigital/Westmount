@@ -171,7 +171,7 @@
                         Soutien financier immédiat lors du décès d'un proche.
                     </p>
                     <ul class="text-left text-sm text-gray-600 space-y-2">
-                        <li>• Montant selon le type de membre</li>
+                        <li>• Montant Contribution selon le type de membre décédé.</li>
                         <li>• Paiement rapide et sécurisé</li>
                         <li>• Processus simplifié</li>
                     </ul>
@@ -230,7 +230,7 @@
                     <div class="text-3xl font-bold text-primary mb-4">${{ number_format($type->adhesion_fee, 0) }}</div>
                     <p class="text-gray-600 mb-6">{{ $type->description ?? 'Adhésion standard' }}</p>
                     <ul class="text-sm text-gray-600 space-y-2 mb-6">
-                        <li>• Selon le type de membre </li>
+                        <li>• Contribution: ${{ number_format($type->death_contribution, 0) }} USD</li>
                         <li>• Accès complet aux services</li>
                         <li>• Support 24/7</li>
                     </ul>
