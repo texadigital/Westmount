@@ -25,27 +25,25 @@ class MassiveMembersSeeder extends Seeder
         $target = 1640;
         $created = 0;
 
-        // Start from current count to avoid duplicates
-        $existing = Member::count();
-        $toCreate = max(0, $target - $existing);
-
-        for ($i = 1; $i <= $toCreate; $i++) {
-            $index = $existing + $i;
-
-            $email = "member{$index}@example.com";
-            if (Member::where('email', $email)->exists()) {
-                // Extremely defensive; skip if somehow exists
-                continue;
+        // Keep creating members until total count reaches target
+        $index = 1;
+        while (Member::count() < $target) {
+            // Find next available email like member{N}@example.com
+            while (Member::where('email', "member{$index}@example.com")->exists()) {
+                $index++;
             }
 
-            $member = Member::create([
+            $email = "member{$index}@example.com";
+
+            $member = Member::firstOrCreate(
+                ['email' => $email],
+                [
                 'member_number' => Member::generateMemberNumber(),
                 'pin_code' => (string) random_int(1000, 9999),
                 'first_name' => 'Membre',
                 'last_name' => (string) $index,
                 'birth_date' => now()->subYears(rand(18, 75))->format('Y-m-d'),
                 'phone' => sprintf('(514) 555-%04d', $index % 10000),
-                'email' => $email,
                 'address' => "#{$index} Rue Exemple, Montréal",
                 'city' => 'Montréal',
                 'province' => 'Québec',
@@ -55,9 +53,13 @@ class MassiveMembersSeeder extends Seeder
                 'member_type_id' => $fallbackTypeId,
                 'is_active' => true,
                 'email_verified_at' => now(),
-            ]);
+                ]
+            );
 
-            Membership::create([
+            Membership::firstOrCreate([
+                'member_id' => $member->id,
+                'is_active' => true,
+            ], [
                 'member_id' => $member->id,
                 'status' => 'active',
                 'start_date' => now()->subMonths(rand(0, 11)),
@@ -68,6 +70,7 @@ class MassiveMembersSeeder extends Seeder
             ]);
 
             $created++;
+            $index++;
         }
 
         // Set funds so that HomeController shows Fonds disponibles = 82,000
