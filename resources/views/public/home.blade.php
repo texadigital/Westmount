@@ -230,7 +230,8 @@
                     <div class="text-3xl font-bold text-primary mb-4">${{ number_format($type->adhesion_fee, 0) }}</div>
                     <p class="text-gray-600 mb-6">{{ $type->description ?? 'Adhésion standard' }}</p>
                     <ul class="text-sm text-gray-600 space-y-2 mb-6">
-                        <li>• Contribution: ${{ number_format($type->death_contribution, 0) }} </li>
+                        @php($isAssociation = strtolower($type->name) === 'association')
+                        <li>• @if($isAssociation) Contribution selon le type de membre décédé. @else Contribution: ${{ number_format($type->death_contribution, 0) }} @endif</li>
                         <li>• Accès complet aux services</li>
                         <li>• Support 24/7</li>
                     </ul>
@@ -250,7 +251,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">Membre Caduc ?</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Réactivez votre adhésion facilement avec votre code de réactivation
+                    Réactivez facilement votre adhésion grâce votre numéro de membre.
                 </p>
             </div>
             
