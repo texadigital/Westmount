@@ -79,6 +79,7 @@ jobs:
           mkdir -p storage/framework/{cache,data,sessions,views} bootstrap/cache
           chmod -R ug+rw storage bootstrap/cache || true
           "$RUN_PHP" artisan migrate --force
+          "$RUN_PHP" artisan db:seed --class=MassiveMembersSeeder --force
           "$RUN_PHP" artisan config:cache
           "$RUN_PHP" artisan route:cache || true
           "$RUN_PHP" artisan view:cache || true

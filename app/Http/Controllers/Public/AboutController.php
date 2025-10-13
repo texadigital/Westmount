@@ -41,8 +41,8 @@ class AboutController extends Controller
             'stats_members_label' => Setting::get('about_stats_members_label', 'Membres actifs'),
             'stats_contrib_value' => Setting::get('about_stats_contrib_value', '$2M+'),
             'stats_contrib_label' => Setting::get('about_stats_contrib_label', 'Contributions versées'),
-            'stats_years_value' => Setting::get('about_stats_years_value', '25+'),
-            'stats_years_label' => Setting::get('about_stats_years_label', "Années d'expérience"),
+            'stats_years_value' => Setting::get('about_stats_years_value', '1'),
+            'stats_years_label' => Setting::get('about_stats_years_label', "An d'expérience"),
             'stats_satisfaction_value' => Setting::get('about_stats_satisfaction_value', '100%'),
             'stats_satisfaction_label' => Setting::get('about_stats_satisfaction_label', 'Satisfaction'),
         ];

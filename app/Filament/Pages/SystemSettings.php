@@ -46,14 +46,14 @@ class SystemSettings extends Page implements Forms\Contracts\HasForms
             'about_stats_members_label' => Setting::get('about_stats_members_label', 'Membres actifs'),
             'about_stats_contrib_value' => Setting::get('about_stats_contrib_value', '$2M+'),
             'about_stats_contrib_label' => Setting::get('about_stats_contrib_label', 'Contributions versées'),
-            'about_stats_years_value' => Setting::get('about_stats_years_value', '25+'),
+            'about_stats_years_value' => Setting::get('about_stats_years_value', '1'),
             'about_stats_years_label' => Setting::get('about_stats_years_label', "Années d'expérience"),
             'about_stats_satisfaction_value' => Setting::get('about_stats_satisfaction_value', '100%'),
             'about_stats_satisfaction_label' => Setting::get('about_stats_satisfaction_label', 'Satisfaction'),
 
             // Footer defaults
             'footer_about_text' => Setting::get('footer_about_text', "Une communauté d'entraide et de solidarité qui accompagne ses membres dans les moments difficiles."),
-            'footer_phone' => Setting::get('footer_phone', '(514) 123-4567'),
+            'footer_phone' => Setting::get('footer_phone', '514-566-4029'),
             'footer_email' => Setting::get('footer_email', 'info@associationwestmount.com'),
             'footer_address' => Setting::get('footer_address', "Montréal, QC, Canada"),
             'footer_hours' => Setting::get('footer_hours', 'Lun-Ven: 9h-17h'),

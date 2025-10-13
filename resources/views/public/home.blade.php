@@ -28,16 +28,16 @@
         </div>
 
         <!-- Overlay gradient for readability -->
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-black/30 z-10"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-black/60 z-10"></div>
 
         <!-- Overlay content -->
         <div class="absolute inset-0 flex items-center z-20">
             <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6" style="text-shadow: 0 2px 6px rgba(0,0,0,.6)">
                         Solidarité & Entraide
                     </h1>
-                    <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                    <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" style="text-shadow: 0 1px 4px rgba(0,0,0,.6)">
                         L'Association Westmount Canada est une communauté solidaire et d'entraide qui vise à apporter un soutien à la famille d'un membre décédé. Ce soutien inclut notamment une aide financière pour aider la famille à faire face aux défis quotidiens.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -70,8 +70,8 @@
                     <div class="text-gray-600">Fonds disponibles</div>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-lg">
-                    <div class="text-3xl font-bold text-accent mb-2">{{ $stats['years_active'] ?? '25+' }}</div>
-                    <div class="text-gray-600">Années d'expérience</div>
+                    <div class="text-3xl font-bold text-accent mb-2">{{ $stats['years_active'] ?? '1' }}</div>
+                    <div class="text-gray-600">An d'expérience</div>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-lg">
                     <div class="text-3xl font-bold text-primary mb-2">100%</div>
@@ -365,7 +365,7 @@
                             <div>
                                 <h4 class="font-semibold text-gray-900">Téléphone</h4>
                                 <p class="text-gray-600">
-                                    <a href="tel:+15141234567" class="hover:text-primary">(514) 123-4567</a><br>
+                                    <a href="tel:+15141234567" class="hover:text-primary">514-566-4029</a><br>
                                     <span class="text-sm text-gray-500">Lun - Ven: 9h00 - 17h00</span>
                                 </p>
                             </div>

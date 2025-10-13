@@ -140,7 +140,7 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Téléphone</h3>
                                 <p class="text-gray-600">
-                                    <a href="tel:+1 (514) 555-0123" class="hover:text-primary">(514) 123-4567</a><br>
+                                    <a href="tel:+1 (514) 555-0123" class="hover:text-primary">514-566-4029</a><br>
                                     <span class="text-sm text-gray-500">Lun - Ven: 9h00 - 17h00</span>
                                 </p>
                             </div>
@@ -186,7 +186,7 @@
                             Pour les décès et situations urgentes, contactez-nous immédiatement :
                         </p>
                         <p class="text-red-800 font-semibold">
-                            <a href="tel:+15141234567" class="hover:underline">(514) 123-4567</a>
+                            <a href="tel:+15141234567" class="hover:underline">514-566-4029</a>
                         </p>
                     </div>
                 </div>

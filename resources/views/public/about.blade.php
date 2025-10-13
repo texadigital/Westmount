@@ -212,7 +212,7 @@
                     <div class="text-gray-600">{{ $about['stats_contrib_label'] ?? 'Contributions versées' }}</div>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-lg">
-                    <div class="text-4xl font-bold text-accent mb-2">{{ $about['stats_years_value'] ?? '25+' }}</div>
+                    <div class="text-4xl font-bold text-accent mb-2">{{ $about['stats_years_value'] ?? '1' }}</div>
                     <div class="text-gray-600">{{ $about['stats_years_label'] ?? "Années d'expérience" }}</div>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-lg">
