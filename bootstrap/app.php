@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Exclude Stripe webhook from CSRF protection so Stripe can POST
         $middleware->validateCsrfTokens(except: [
             'webhook/stripe',
+            'admin/login',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
