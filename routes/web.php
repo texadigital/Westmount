@@ -23,6 +23,25 @@ Route::get('/about', [App\Http\Controllers\Public\AboutController::class, 'index
 Route::get('/contact', [App\Http\Controllers\Public\ContactController::class, 'index'])->name('public.contact');
 Route::post('/contact', [App\Http\Controllers\Public\ContactController::class, 'send'])->name('public.contact.send');
 
+// Fallback POST handler for Filament admin login when JS (Livewire) is unavailable
+Route::middleware('guest')->post('/admin/login', function (\Illuminate\Http\Request $request) {
+    $credentials = $request->validate([
+        'email' => ['required', 'string', 'email'],
+        'password' => ['required', 'string'],
+    ]);
+
+    $remember = (bool) $request->boolean('remember');
+
+    if (\Illuminate\Support\Facades\Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+        return redirect()->intended('/admin');
+    }
+
+    return back()->withErrors([
+        'email' => trans('auth.failed'),
+    ])->onlyInput('email');
+})->name('filament.admin.auth.login.post');
+
 // Additional public pages
 Route::get('/services', [App\Http\Controllers\Public\ServicesController::class, 'index'])->name('public.services');
 Route::get('/contributions-deces', [App\Http\Controllers\Public\DeathContributionsController::class, 'index'])->name('public.death-contributions');

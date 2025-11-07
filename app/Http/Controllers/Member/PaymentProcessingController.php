@@ -313,9 +313,20 @@ class PaymentProcessingController extends Controller
             ]);
         }
 
+        // If not yet succeeded, check current PaymentIntent status and respond accordingly
+        $status = $this->stripePaymentService->getPaymentIntentStatus($request->payment_intent_id);
+        if (in_array($status, ['processing', 'requires_capture', 'requires_action'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Paiement en cours de traitement. Veuillez patienter...',
+                'status' => $status,
+            ], 202);
+        }
+
         return response()->json([
             'success' => false,
             'message' => 'Paiement non confirmé.',
+            'status' => $status,
         ], 400);
     }
 

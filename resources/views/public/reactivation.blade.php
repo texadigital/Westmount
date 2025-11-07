@@ -43,7 +43,7 @@
                                         Réactivation d'adhésion
                                     </h3>
                                     <div class="mt-2 text-sm text-yellow-700">
-                                        <p>Saisissez le <strong>code de réactivation</strong> que vous avez reçu par email lors de la désactivation de votre adhésion.</p>
+                                        <p>Réactivez facilement votre adhésion par votre numéro de membre.</p>
                                         <p class="mt-2">Vous n'avez pas de code ? <a href="{{ route('public.contact') }}" class="underline">Contactez-nous</a> pour en obtenir un.</p>
                                     </div>
                                 </div>

@@ -231,7 +231,7 @@
                         </button>
                         <div class="faq-content hidden px-6 pb-6">
                             <p class="text-gray-600">
-                                Les montants des contributions varient selon le type de membre :
+                                Les montants des contributions varient Contribution selon le type de membre décédé. :
                             </p>
                             <ul class="list-disc list-inside mt-2 text-gray-600">
                                 <li>Membres réguliers : 10$ CAD</li>

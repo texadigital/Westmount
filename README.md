@@ -141,7 +141,7 @@ Application web de gestion pour l'Association d'entraide et de solidarité Westm
 ### 👥 Gestion des Membres
 - **Numéro unique** : Génération automatique (format WM + 6 chiffres)
 - **Code PIN** : 4-6 chiffres pour la connexion
-- **Validation d'âge** : Selon le type de membre
+- **Validation d'âge** : Contribution selon le type de membre décédé.
 - **Parrainage** : Système de codes uniques
 
 ### 💳 Système de Paiements

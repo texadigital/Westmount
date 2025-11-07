@@ -23,6 +23,27 @@ class StripePaymentService
     }
 
     /**
+     * Récupérer le statut d'une PaymentIntent
+     */
+    public function getPaymentIntentStatus(string $paymentIntentId): ?string
+    {
+        if (!config('services.stripe.secret')) {
+            return null;
+        }
+
+        try {
+            $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+            return $paymentIntent->status;
+        } catch (ApiErrorException $e) {
+            Log::error('Erreur lors de la récupération du statut PaymentIntent', [
+                'payment_intent_id' => $paymentIntentId,
+                'error' => $e->getMessage(),
+            ]);
+            return null;
+        }
+    }
+
+    /**
      * Créer un client Stripe pour un membre
      */
     public function createCustomer(Member $member): ?string

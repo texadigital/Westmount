@@ -102,7 +102,7 @@ class ContributionService
         $memberType = $member->memberType;
         $deceasedMemberType = $deceasedMember->memberType;
 
-        // Montant de base selon le type de membre
+        // Montant de base Contribution selon le type de membre décédé.
         $baseAmount = $memberType->death_contribution;
 
         // Ajustements selon les règles métier
@@ -130,7 +130,7 @@ class ContributionService
             $adjustment += 2.00; // Bonus pour membre senior décédé
         }
 
-        // Ajustement selon le type de membre décédé
+        // Ajustement Contribution selon le type de membre décédé. décédé
         if ($deceasedMember->memberType && $deceasedMember->memberType->name === 'Senior') {
             $adjustment += 1.00; // Bonus pour décès d'un senior
         }
